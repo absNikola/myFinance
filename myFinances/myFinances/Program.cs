@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace myFinances
 {
@@ -71,21 +73,34 @@ namespace myFinances
 
     static class Program
     {
+        private static void InitData()
+        {
+            try
+            {
+                var document = XDocument.Load("Settings.xml");
+                Globals.ServerName = document.Descendants("ServerName").First().Value;
+                Globals.ServerPort = Convert.ToInt32(document.Descendants("ServerPort").First().Value);
+
+                Globals.DbName = document.Descendants("DbName").First().Value;
+                Globals.DbUserName = document.Descendants("DbUserName").First().Value;
+                Globals.DbUserPassword = document.Descendants("DbUserPassword").First().Value;
+
+                Globals.DefaultIdBill = Convert.ToInt32(document.Descendants("DefaultIdBill").First().Value);
+                Globals.DefaultIdExpence = Convert.ToInt32(document.Descendants("DefaultIdExpence").First().Value);
+                Globals.DefaultIdIncome = Convert.ToInt32(document.Descendants("DefaultIdIncome").First().Value);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Что-то пошло не так при считывании настроек: " + ex.Message);
+            }
+
+            Globals.ErrorText = "Что-то пошло не так";
+        }
+
         [STAThread]
         static void Main()
         {
-            //Globals.ServerName = "bogoyavlensky.dlinkddns.com";
-            Globals.ServerName = "bogoyavlensky.com";
-            Globals.ServerPort = 3306;
-            Globals.DbName = "financialDB";
-            Globals.DbUserName = "root";
-            Globals.DbUserPassword = "123";
-            Globals.ErrorText = "Что-то пошло не так";
-
-            // Ноль для пустого списка счетов
-            Globals.DefaultIdBill = 3;
-            Globals.DefaultIdIncome = 3;
-            Globals.DefaultIdExpence = 10;
+            InitData();
 
             // Запуск приложения
             Application.EnableVisualStyles();

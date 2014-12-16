@@ -38,3 +38,17 @@ c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\obj\Relea
 c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\obj\Release\myFinances.MainForm.resources
 c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\obj\Release\myFinances.Properties.Resources.resources
 c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\obj\Release\myFinances.csproj.GenerateResource.Cache
+G:\git_repository\myFinance\myFinances\myFinances\bin\Release\myFinances.exe.config
+G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.exe
+G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.pdb
+G:\git_repository\myFinance\myFinances\myFinances\bin\Release\libs\MySql.Data.dll
+G:\git_repository\myFinance\myFinances\myFinances\bin\Release\Settings.xml
+G:\git_repository\myFinance\myFinances\myFinances\bin\Release\myFinances.exe
+G:\git_repository\myFinance\myFinances\myFinances\bin\Release\myFinances.pdb
+G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.csprojResolveAssemblyReference.cache
+G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.AddingNewBill.resources
+G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.AddingNewIncome.resources
+G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.ErrorWindow.resources
+G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.MainForm.resources
+G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.Properties.Resources.resources
+G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.csproj.GenerateResource.Cache
