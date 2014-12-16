@@ -1,0 +1,40 @@
+C:\Temp\myFinances\myFinances\bin\Release\myFinances.exe.config
+C:\Temp\myFinances\myFinances\bin\Release\libs\MySql.Data.dll
+C:\Temp\myFinances\myFinances\bin\Release\myFinances.exe
+C:\Temp\myFinances\myFinances\bin\Release\myFinances.pdb
+C:\Temp\myFinances\myFinances\obj\Release\myFinances.AddingNewBill.resources
+C:\Temp\myFinances\myFinances\obj\Release\myFinances.AddingNewIncome.resources
+C:\Temp\myFinances\myFinances\obj\Release\myFinances.ErrorWindow.resources
+C:\Temp\myFinances\myFinances\obj\Release\myFinances.MainForm.resources
+C:\Temp\myFinances\myFinances\obj\Release\myFinances.Properties.Resources.resources
+C:\Temp\myFinances\myFinances\obj\Release\myFinances.csproj.GenerateResource.Cache
+C:\Temp\myFinances\myFinances\obj\Release\myFinances.exe
+C:\Temp\myFinances\myFinances\obj\Release\myFinances.pdb
+C:\Temp\myFinances\myFinances\obj\Release\myFinances.csprojResolveAssemblyReference.cache
+C:\Temp\myFinances - 3\myFinances\bin\Release\myFinances.exe.config
+C:\Temp\myFinances - 3\myFinances\obj\Release\myFinances.exe
+C:\Temp\myFinances - 3\myFinances\obj\Release\myFinances.pdb
+C:\Temp\myFinances - 3\myFinances\bin\Release\libs\MySql.Data.dll
+C:\Temp\myFinances - 3\myFinances\bin\Release\myFinances.exe
+C:\Temp\myFinances - 3\myFinances\bin\Release\myFinances.pdb
+C:\Temp\myFinances - 3\myFinances\obj\Release\myFinances.csprojResolveAssemblyReference.cache
+C:\Temp\myFinances - 3\myFinances\obj\Release\myFinances.AddingNewBill.resources
+C:\Temp\myFinances - 3\myFinances\obj\Release\myFinances.AddingNewIncome.resources
+C:\Temp\myFinances - 3\myFinances\obj\Release\myFinances.ErrorWindow.resources
+C:\Temp\myFinances - 3\myFinances\obj\Release\myFinances.MainForm.resources
+C:\Temp\myFinances - 3\myFinances\obj\Release\myFinances.Properties.Resources.resources
+C:\Temp\myFinances - 3\myFinances\obj\Release\myFinances.csproj.GenerateResource.Cache
+c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\bin\Release\myFinances.exe.config
+c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\obj\Release\myFinances.exe
+c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\obj\Release\myFinances.pdb
+c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\bin\Release\libs\MySql.Data.dll
+c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\bin\Release\myFinances.exe
+c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\bin\Release\myFinances.pdb
+c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\bin\Release\MySql.Data.dll
+c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\obj\Release\myFinances.csprojResolveAssemblyReference.cache
+c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\obj\Release\myFinances.AddingNewBill.resources
+c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\obj\Release\myFinances.AddingNewIncome.resources
+c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\obj\Release\myFinances.ErrorWindow.resources
+c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\obj\Release\myFinances.MainForm.resources
+c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\obj\Release\myFinances.Properties.Resources.resources
+c:\Temp\Мои финансы - Проект\myFinances - 3\myFinances\obj\Release\myFinances.csproj.GenerateResource.Cache

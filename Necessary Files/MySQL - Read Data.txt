@@ -1,0 +1,39 @@
+using MySql.Data.MySqlClient;
+
+
+static void Main(string[] args)
+{
+    var Server = "bogoyavlensky.com";
+    var Port = "3306";
+    var DataBaseName = "financialdb";
+    var UserID = "root";
+    var Password = "123";
+
+    var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
+                     "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
+
+    try
+    {
+        var conn = new MySqlConnection(connString);
+        conn.Open();
+        var query = "SELECT * FROM nsi_bill ";
+        var command = new MySqlCommand(query) { Connection = conn };
+        var dataReader = command.ExecuteReader();
+        while (dataReader.Read())
+        {
+            var bill = new BillDto()
+            {
+                Id = (int)dataReader["Id"],
+                Name = (string)dataReader["Name"],
+                Comment = dataReader["Name"] == DBNull.Value ? string.Empty : (string) dataReader["Name"],
+            };
+            listBill.Add(bill);
+        }
+        dataReader.Close();
+        conn.Close();
+    }
+    catch (MySqlException ex)
+    {
+        throw new Exception("Произошла ошибка при подключении к nsi_bill : " + ex.ToString());
+    }
+}

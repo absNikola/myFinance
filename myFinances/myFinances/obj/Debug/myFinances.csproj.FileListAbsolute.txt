@@ -1,0 +1,13 @@
+C:\Temp\myFinances\myFinances\bin\Debug\myFinances.exe.config
+C:\Temp\myFinances\myFinances\bin\Debug\libs\MySql.Data.dll
+C:\Temp\myFinances\myFinances\bin\Debug\myFinances.exe
+C:\Temp\myFinances\myFinances\bin\Debug\myFinances.pdb
+C:\Temp\myFinances\myFinances\obj\Debug\myFinances.Properties.Resources.resources
+C:\Temp\myFinances\myFinances\obj\Debug\myFinances.csproj.GenerateResource.Cache
+C:\Temp\myFinances\myFinances\obj\Debug\myFinances.exe
+C:\Temp\myFinances\myFinances\obj\Debug\myFinances.pdb
+C:\Temp\myFinances\myFinances\obj\Debug\myFinances.addingNewBill.resources
+C:\Temp\myFinances\myFinances\obj\Debug\myFinances.mainForm.resources
+C:\Temp\myFinances\myFinances\obj\Debug\myFinances.ErrorWindow.resources
+C:\Temp\myFinances\myFinances\obj\Debug\myFinances.AddingNewIncome.resources
+C:\Temp\myFinances\myFinances\obj\Debug\myFinances.csprojResolveAssemblyReference.cache
