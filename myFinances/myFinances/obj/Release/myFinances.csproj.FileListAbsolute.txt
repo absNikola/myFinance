@@ -47,8 +47,8 @@ G:\git_repository\myFinance\myFinances\myFinances\bin\Release\myFinances.exe
 G:\git_repository\myFinance\myFinances\myFinances\bin\Release\myFinances.pdb
 G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.csprojResolveAssemblyReference.cache
 G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.AddingNewBill.resources
-G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.AddingNewIncome.resources
-G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.ErrorWindow.resources
 G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.MainForm.resources
 G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.Properties.Resources.resources
 G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.csproj.GenerateResource.Cache
+G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.MessageWindow.resources
+G:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.AddingNewOperation.resources

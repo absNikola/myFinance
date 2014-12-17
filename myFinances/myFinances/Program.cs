@@ -49,23 +49,14 @@ namespace myFinances
 
     public class MessageSender
     {
-        public static void SendError(Form form, string errorText)
+        public static void SendMessage(Form form, string messageText, string typeMessage)
         {
-            Globals.ErrorText = errorText;
-            var newForm = new ErrorWindow()
+            Globals.ErrorText = messageText;
+            var newForm = new MessageWindow()
             {
                 Owner = form,
                 StartPosition = FormStartPosition.CenterParent,
-            };
-            newForm.ShowDialog();
-        }
-        public static void SendOk(Form form, string okText)
-        {
-            Globals.ErrorText = okText;
-            var newForm = new OkWindow()
-            {
-                Owner = form,
-                StartPosition = FormStartPosition.CenterParent,
+                Text = typeMessage,
             };
             newForm.ShowDialog();
         }

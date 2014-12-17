@@ -1,6 +1,6 @@
 ﻿namespace myFinances
 {
-    partial class ErrorWindow
+    partial class MessageWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -51,7 +51,7 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "label1";
             // 
-            // ErrorWindow
+            // MessageWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -62,8 +62,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "ErrorWindow";
-            this.Text = "Ошибка";
+            this.Name = "MessageWindow";
+            this.Text = "Тип сообщения";
             this.ResumeLayout(false);
             this.PerformLayout();
 

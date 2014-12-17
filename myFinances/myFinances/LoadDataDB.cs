@@ -9,7 +9,7 @@ namespace myFinances
 {
     class LoadDataDB
     {
-        public static List<StructureDto> FindChildren(StructureDto parent, List<StructureDto> listStructure, string prefix)
+        public static List<StructureDto> FindChildrenAtListOperation(StructureDto parent, List<StructureDto> listStructure, string prefix)
         {
             var listOfChildren = new List<StructureDto>();
             foreach (var element in listStructure)
@@ -18,12 +18,12 @@ namespace myFinances
                 {
                     element.Name = prefix + element.Name;
                     listOfChildren.Add(element);
-                    listOfChildren.AddRange(FindChildren(element, listStructure, prefix + "   "));
+                    listOfChildren.AddRange(FindChildrenAtListOperation(element, listStructure, prefix + "   "));
                 }
             return listOfChildren;
         }
 
-        public static List<StructureDto> SortedListOperation(List<StructureDto> listIn)
+        public static List<StructureDto> SortingAtListOperation(List<StructureDto> listIn)
         {
             // Неправильная сортировка
             // listStructure.Sort((x, y) => x.Name.CompareTo(y.Name));
@@ -33,7 +33,7 @@ namespace myFinances
                 {
                     // для данного элемента должны найти всех его детей
                     listOut.Add(element);
-                    listOut.AddRange(FindChildren(element, listIn, "   "));
+                    listOut.AddRange(FindChildrenAtListOperation(element, listIn, "   "));
                 }
 
             return listOut;
@@ -138,7 +138,7 @@ namespace myFinances
             }
 
             // и еще необходимо отсортировать по правильным вложенным подкатегориям
-            listStructure = SortedListOperation(listStructure);
+            listStructure = SortingAtListOperation(listStructure);
 
             // сказали ответ
             return listStructure;
@@ -210,7 +210,7 @@ namespace myFinances
             }
 
             // и еще необходимо отсортировать по правильным вложенным подкатегориям
-            listStructure = SortedListOperation(listStructure);
+            listStructure = SortingAtListOperation(listStructure);
 
             // сказали ответ
             return listStructure;

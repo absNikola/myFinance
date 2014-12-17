@@ -50,19 +50,22 @@ namespace myFinances
         {
             if (comboBox1.SelectedIndex == -1)
             {
-                MessageSender.SendError(this, "Не выбран счёт для совершения операций");
+                MessageSender.SendMessage(this, "Не выбран счёт для совершения операций", "Ошибка");
             }
             else
             {
                 if (LoadDataDB.GetIdBillbyName(comboBox1.Items[comboBox1.SelectedIndex].ToString()) != -1)
                 {
                     // Здесь необходимо добавить запись в БД
-                    var newForm = new AddingNewIncome();
-                    newForm.StartPosition = FormStartPosition.CenterParent;
+                    var newForm = new AddingNewOperation()
+                    {
+                        Text = "Добавить доход",
+                        StartPosition = FormStartPosition.CenterParent,
+                    };
                     newForm.ShowDialog();
                 }
-                else MessageSender.SendError(this, "           Выбран несуществующий счёт \n" +
-                                                 "               для совершения операций");
+                else MessageSender.SendMessage(this, "           Выбран несуществующий счёт \n" +
+                                                 "               для совершения операций", "Ошибка");
             }
         }
 
@@ -81,6 +84,29 @@ namespace myFinances
                     // Перезаполнили значения в контроле
                     comboBox1_SetData();
                 }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedIndex == -1)
+            {
+                MessageSender.SendMessage(this, "Не выбран счёт для совершения операций", "Ошибка");
+            }
+            else
+            {
+                if (LoadDataDB.GetIdBillbyName(comboBox1.Items[comboBox1.SelectedIndex].ToString()) != -1)
+                {
+                    // Здесь необходимо добавить запись в БД
+                    var newForm = new AddingNewOperation()
+                    {
+                        Text = "Отметить расход",
+                        StartPosition = FormStartPosition.CenterParent,
+                    };
+                    newForm.ShowDialog();
+                }
+                else MessageSender.SendMessage(this, "           Выбран несуществующий счёт \n" +
+                                                 "               для совершения операций", "Ошибка");
+            }
         }
     }
 }

@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace myFinances
 {
-    public partial class ErrorWindow : Form
+    public partial class MessageWindow : Form
     {
-        public ErrorWindow()
+        public MessageWindow()
         {
             InitializeComponent();
 

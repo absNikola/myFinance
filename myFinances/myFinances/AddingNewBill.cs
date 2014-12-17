@@ -32,7 +32,7 @@ namespace myFinances
             // Полагаем, что все символы хорошие
             if (textBox1.Text==string.Empty)
             {
-                MessageSender.SendError(this, "Название счёта не может быть пустым");
+                MessageSender.SendMessage(this, "Название счёта не может быть пустым", "Ошибка");
             }
             else
             {
@@ -43,7 +43,7 @@ namespace myFinances
                     Comment = textBox2.Text,
                 };
                 var saveBillResult = SaveDataDB.SaveBilltoDb(bill);
-                if (!saveBillResult.Equals("Success")) MessageSender.SendError(this, saveBillResult);
+                if (!saveBillResult.Equals("Success")) MessageSender.SendMessage(this, saveBillResult, "Успешно");
                 Close();
             }
         }

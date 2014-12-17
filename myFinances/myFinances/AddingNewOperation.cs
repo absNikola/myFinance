@@ -12,13 +12,13 @@ using System.Windows.Forms;
 
 namespace myFinances
 {
-    public partial class AddingNewIncome : Form
+    public partial class AddingNewOperation : Form
     {
         public string NewOperationText = "< Добавить новую категорию >";
         public string NewOperationSeparator = "-----------------------------------------------------";
         public int SelectedIdBill = -1;
 
-        public AddingNewIncome()
+        public AddingNewOperation()
         {
             InitializeComponent();
 
@@ -52,11 +52,20 @@ namespace myFinances
             //закомментировано тлк для отладки
             comboBox1.Items.Add(NewOperationText);
             comboBox1.Items.Add(NewOperationSeparator);
-            var listOperation = LoadDataDB.GetListIncomeOperation(SelectedIdBill);
+
+            var listOperation = new List<StructureDto>();
+            if (this.Text.Equals("Добавить доход"))
+            {
+                listOperation = LoadDataDB.GetListIncomeOperation(SelectedIdBill);
+                comboBox1.SelectedIndex = Globals.DefaultIdIncome;
+            }
+            else if (this.Text.Equals("Отметить расход"))
+            {
+                listOperation = LoadDataDB.GetListExpenceOperation(SelectedIdBill);
+                comboBox1.SelectedIndex = Globals.DefaultIdExpence;
+            }
             foreach (var operation in listOperation) comboBox1.Items.Add(operation.Name);
-            
-            if (comboBox1.Items.Count == 1) comboBox1.SelectedIndex = -1;
-            else comboBox1.SelectedIndex = Globals.DefaultIdIncome;
+            if (comboBox1.Items.Count == 2) comboBox1.SelectedIndex = -1;
 
             button1.Select();
         }
@@ -104,29 +113,29 @@ namespace myFinances
         {
             if (!textBox1.Text.Equals("0") && SelectedIdBill != -1)
             {
-                var newIncome = new OperationDto()
+                var newOperation = new OperationDto()
                 {
                     IdBill = SelectedIdBill,
                     Amount = Convert.ToInt64(textBox1.Text),
                     Comment = textBox2.Text,
                 };
-                if (checkBox1.Checked) newIncome.Date = DateTime.Today;
-                else newIncome.Date = dateTimePicker1.Value;
-                var resultOperation = SaveDataDB.SaveIncomeOperationtoDb(newIncome);
+                if (checkBox1.Checked) newOperation.Date = DateTime.Today;
+                else newOperation.Date = dateTimePicker1.Value;
+                var resultOperation = SaveDataDB.SaveOperationtoDb(newOperation, this.Text);
                 if (resultOperation.Equals("Success"))
                 {
-                    MessageSender.SendOk(this, "Данные успешно внесены");
+                    MessageSender.SendMessage(this, "Данные успешно внесены", "Успешно");
                 }
                 else
                 {
-                    MessageSender.SendError(this, resultOperation);
+                    MessageSender.SendMessage(this, resultOperation, "Ошибка");
                 }
                 // В формочку проставили нормальные значения
                 InitializeData();
             }
             else
             {
-                MessageSender.SendError(this, "    Необходимо внести сумму операции");
+                MessageSender.SendMessage(this, "    Необходимо внести сумму операции", "Ошибка");
             }
         }
 

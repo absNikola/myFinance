@@ -34,8 +34,13 @@ namespace myFinances
             return result;
         }
 
-        public static string SaveIncomeOperationtoDb(OperationDto operation)
+        public static string SaveOperationtoDb(OperationDto operation, string nameOperation)
         {
+            var nameTable = string.Empty;
+            if (nameOperation.Equals("Добавить доход")) nameTable = "income";
+            else if (nameOperation.Equals("Отметить расход")) nameTable = "expence";
+                 else return "Не определен тип операции";
+
             var result = "Success";
             var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
                              "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
@@ -45,7 +50,7 @@ namespace myFinances
                 var conn = new MySqlConnection(connString);
                 conn.Open();
                 var command = conn.CreateCommand();
-                command.CommandText = "INSERT INTO income (Bill_Id, Amount, Date, Comment) VALUES(?billId, ?amount, ?date, ?comment)";
+                command.CommandText = "INSERT INTO " + nameTable + " (Bill_Id, Amount, Date, Comment) VALUES(?billId, ?amount, ?date, ?comment)";
                 command.Parameters.Add("?billId", MySqlDbType.Int32).Value = operation.IdBill;
                 command.Parameters.Add("?amount", MySqlDbType.Int64).Value = operation.Amount;
                 command.Parameters.Add("?date", MySqlDbType.DateTime).Value = operation.Date;

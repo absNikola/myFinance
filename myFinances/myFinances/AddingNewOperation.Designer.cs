@@ -1,6 +1,6 @@
 ﻿namespace myFinances
 {
-    partial class AddingNewIncome
+    partial class AddingNewOperation
     {
         /// <summary>
         /// Required designer variable.
@@ -121,7 +121,7 @@
             this.label2.TabIndex = 8;
             this.label2.Text = "label2";
             // 
-            // AddingNewIncome
+            // AddingNewOperation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -139,8 +139,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "AddingNewIncome";
-            this.Text = "Добавление дохода";
+            this.Name = "AddingNewOperation";
+            this.Text = "Тип операции";
             this.ResumeLayout(false);
             this.PerformLayout();
 
