@@ -25,8 +25,9 @@ namespace myFinances
 
         public static List<StructureDto> SortingAtListOperation(List<StructureDto> listIn)
         {
-            // Неправильная сортировка
+            // Неправильная сортировка, поскольку нужно не по алфавиту, а по структуре
             // listStructure.Sort((x, y) => x.Name.CompareTo(y.Name));
+            // А теперь правильная:
             var listOut = new List<StructureDto>();
             foreach (var element in listIn)
                 if (element.Id.Equals(element.ParentId))
@@ -37,69 +38,6 @@ namespace myFinances
                 }
 
             return listOut;
-        }
-
-        public static List<BillDto> GetListBill()
-        {
-            var listBill = new List<BillDto>();
-            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
-                             "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
-
-            try
-            {
-                var conn = new MySqlConnection(connString);
-                conn.Open();
-                var query = "SELECT * FROM nsi_bill ";
-                var command = new MySqlCommand(query) { Connection = conn };
-                var dataReader = command.ExecuteReader();
-                while (dataReader.Read())
-                {
-                    var bill = new BillDto()
-                    {
-                        Id = (int)dataReader["Id"],
-                        Name = (string)dataReader["Name"],
-                        Comment = dataReader["Name"] == DBNull.Value ? string.Empty : (string) dataReader["Name"],
-                    };
-                    listBill.Add(bill);
-                }
-                dataReader.Close();
-                conn.Close();
-            }
-            catch (MySqlException ex)
-            {
-                throw new Exception("Произошла ошибка при подключении к nsi_bill : " + ex.ToString());
-            }
-
-            return listBill;
-        }
-
-        public static int GetIdBillbyName(string billName)
-        {
-            // Если запись есть в БД - вернет её Id, иначе вернет -1
-            var idBill = -1;
-            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
-                             "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
-
-            try
-            {
-                var conn = new MySqlConnection(connString);
-                conn.Open();
-                var query = "SELECT * FROM nsi_bill WHERE nsi_bill.Name = '" + billName + "'";
-                var command = new MySqlCommand(query) { Connection = conn };
-                var dataReader = command.ExecuteReader();
-                if (dataReader.Read())
-                {
-                    idBill = (int)dataReader["Id"];
-                }
-                dataReader.Close();
-                conn.Close();
-            }
-            catch (MySqlException ex)
-            {
-                throw new Exception("Произошла ошибка при подключении к nsi_bill : " + ex.ToString());
-            }
-
-            return idBill;
         }
 
         public static List<StructureDto> GetListOperation(int idBill, string typeOperation)
@@ -149,6 +87,69 @@ namespace myFinances
             return listStructure;
         }
 
+        public static List<BillDto> GetListBill()
+        {
+            var listBill = new List<BillDto>();
+            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
+                             "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
+
+            try
+            {
+                var conn = new MySqlConnection(connString);
+                conn.Open();
+                var query = "SELECT * FROM nsi_bill ";
+                var command = new MySqlCommand(query) { Connection = conn };
+                var dataReader = command.ExecuteReader();
+                while (dataReader.Read())
+                {
+                    var bill = new BillDto()
+                    {
+                        Id = (int)dataReader["Id"],
+                        Name = (string)dataReader["Name"],
+                        Comment = dataReader["Name"] == DBNull.Value ? string.Empty : (string)dataReader["Name"],
+                    };
+                    listBill.Add(bill);
+                }
+                dataReader.Close();
+                conn.Close();
+            }
+            catch (MySqlException ex)
+            {
+                throw new Exception("Произошла ошибка при подключении к nsi_bill : " + ex.ToString());
+            }
+
+            return listBill;
+        }
+
+        public static int GetIdBillbyName(string billName)
+        {
+            // Если запись есть в БД - вернет её Id, иначе вернет -1
+            var idBill = -1;
+            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
+                             "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
+
+            try
+            {
+                var conn = new MySqlConnection(connString);
+                conn.Open();
+                var query = "SELECT * FROM nsi_bill WHERE nsi_bill.Name = '" + billName + "'";
+                var command = new MySqlCommand(query) { Connection = conn };
+                var dataReader = command.ExecuteReader();
+                if (dataReader.Read())
+                {
+                    idBill = (int)dataReader["Id"];
+                }
+                dataReader.Close();
+                conn.Close();
+            }
+            catch (MySqlException ex)
+            {
+                throw new Exception("Произошла ошибка при подключении к nsi_bill : " + ex.ToString());
+            }
+
+            return idBill;
+        }
+
         public static int GetIdOperationbyName(string nameOperation, int idBill, string typeOperation)
         {
             var nameTable = string.Empty;
@@ -171,7 +172,7 @@ namespace myFinances
                 var dataReader = command.ExecuteReader();
                 if (dataReader.Read())
                 {
-                    if ((int)dataReader["Bill_Id"] == 0 || (int)dataReader["Bill_Id"] == idBill) 
+                    if ((int)dataReader["Bill_Id"] == 0 || (int)dataReader["Bill_Id"] == idBill)
                         idOperation = (int)dataReader["Id"];
                 }
                 dataReader.Close();

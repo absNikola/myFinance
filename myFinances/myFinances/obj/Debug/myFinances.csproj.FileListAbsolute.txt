@@ -41,3 +41,4 @@ c:\Git\myFinance\myFinances\myFinances\obj\Debug\myFinances.MessageWindow.resour
 c:\Git\myFinance\myFinances\myFinances\obj\Debug\myFinances.MainForm.resources
 c:\Git\myFinance\myFinances\myFinances\obj\Debug\myFinances.Properties.Resources.resources
 c:\Git\myFinance\myFinances\myFinances\obj\Debug\myFinances.csproj.GenerateResource.Cache
+c:\Git\myFinance\myFinances\myFinances\obj\Debug\myFinances.OptionsWindow.resources
