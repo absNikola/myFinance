@@ -54,18 +54,20 @@ namespace myFinances
             comboBox1.Items.Add(NewOperationSeparator);
 
             var listOperation = new List<StructureDto>();
-            if (this.Text.Equals("Добавить доход"))
+            var parentForm = Application.OpenForms[0] as MainForm;
+            var index = -1;
+            if (parentForm.button1.Capture)
             {
                 listOperation = LoadDataDB.GetListIncomeOperation(SelectedIdBill);
-                comboBox1.SelectedIndex = Globals.DefaultIdIncome;
+                index = Globals.DefaultIdIncome;
             }
-            else if (this.Text.Equals("Отметить расход"))
+            else if (parentForm.button2.Capture)
             {
                 listOperation = LoadDataDB.GetListExpenceOperation(SelectedIdBill);
-                comboBox1.SelectedIndex = Globals.DefaultIdExpence;
+                index = Globals.DefaultIdExpence;
             }
             foreach (var operation in listOperation) comboBox1.Items.Add(operation.Name);
-            if (comboBox1.Items.Count == 2) comboBox1.SelectedIndex = -1;
+            comboBox1.SelectedIndex = index;
 
             button1.Select();
         }
