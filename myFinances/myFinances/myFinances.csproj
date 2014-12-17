@@ -64,11 +64,11 @@
     <Compile Include="AddingNewOperation.Designer.cs">
       <DependentUpon>AddingNewOperation.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddingNewIncomeGroup.cs">
+    <Compile Include="AddingNewOperationGroup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddingNewIncomeGroup.Designer.cs">
-      <DependentUpon>AddingNewIncomeGroup.cs</DependentUpon>
+    <Compile Include="AddingNewOperationGroup.Designer.cs">
+      <DependentUpon>AddingNewOperationGroup.cs</DependentUpon>
     </Compile>
     <Compile Include="MessageWindow.cs">
       <SubType>Form</SubType>

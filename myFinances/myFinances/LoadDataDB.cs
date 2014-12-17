@@ -102,8 +102,13 @@ namespace myFinances
             return idBill;
         }
 
-        public static List<StructureDto> GetListIncomeOperation(int idBill)
+        public static List<StructureDto> GetListOperation(int idBill, string typeOperation)
         {
+            var nameTable = string.Empty;
+            if (typeOperation.Equals("Добавить доход")) nameTable = "nsi_income_structure";
+            else if (typeOperation.Equals("Отметить расход")) nameTable = "nsi_expence_structure";
+            else return null;
+
             var listStructure = new List<StructureDto>();
             var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
                              "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
@@ -112,7 +117,7 @@ namespace myFinances
             {
                 var conn = new MySqlConnection(connString);
                 conn.Open();
-                var query = "SELECT * FROM nsi_income_structure ";
+                var query = "SELECT * FROM " + nameTable;
                 var command = new MySqlCommand(query) { Connection = conn };
                 var dataReader = command.ExecuteReader();
                 while (dataReader.Read())
@@ -134,7 +139,7 @@ namespace myFinances
             }
             catch (MySqlException ex)
             {
-                throw new Exception("Произошла ошибка при подключении к nsi_income_structure : " + ex.ToString());
+                throw new Exception("Произошла ошибка при подключении к " + nameTable + " : " + ex.ToString());
             }
 
             // и еще необходимо отсортировать по правильным вложенным подкатегориям
@@ -144,8 +149,14 @@ namespace myFinances
             return listStructure;
         }
 
-        public static int GetIdIncomeOperationbyName(string operationName, int idBill)
+        public static int GetIdOperationbyName(string nameOperation, int idBill, string typeOperation)
         {
+            var nameTable = string.Empty;
+            if (typeOperation.Equals("Добавить доход")) nameTable = "nsi_income_structure";
+            else if (typeOperation.Equals("Отметить расход")) nameTable = "nsi_expence_structure";
+            else return -1;
+
+
             // Если запись есть в БД - вернет её Id, иначе вернет -1
             var idOperation = -1;
             var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
@@ -155,12 +166,12 @@ namespace myFinances
             {
                 var conn = new MySqlConnection(connString);
                 conn.Open();
-                var query = "SELECT * FROM nsi_income_structure WHERE nsi_income_structure.Name = '" + operationName + "'";
+                var query = "SELECT * FROM " + nameTable + " WHERE " + nameTable + ".Name = '" + nameOperation + "'";
                 var command = new MySqlCommand(query) { Connection = conn };
                 var dataReader = command.ExecuteReader();
                 if (dataReader.Read())
                 {
-                    if ((int)dataReader["Bill_Id"] == '0' || (int)dataReader["Bill_Id"] == idBill) 
+                    if ((int)dataReader["Bill_Id"] == 0 || (int)dataReader["Bill_Id"] == idBill) 
                         idOperation = (int)dataReader["Id"];
                 }
                 dataReader.Close();
@@ -168,80 +179,7 @@ namespace myFinances
             }
             catch (MySqlException ex)
             {
-                throw new Exception("Произошла ошибка при подключении к nsi_income_structure : " + ex.ToString());
-            }
-
-            return idOperation;
-        }
-
-        public static List<StructureDto> GetListExpenceOperation(int idBill)
-        {
-            var listStructure = new List<StructureDto>();
-            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
-                             "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
-
-            try
-            {
-                var conn = new MySqlConnection(connString);
-                conn.Open();
-                var query = "SELECT * FROM nsi_expence_structure ";
-                var command = new MySqlCommand(query) { Connection = conn };
-                var dataReader = command.ExecuteReader();
-                while (dataReader.Read())
-                {
-                    if ((int)dataReader["Bill_Id"] == '0' || (int)dataReader["Bill_Id"] == idBill)
-                    {
-                        var structure = new StructureDto()
-                        {
-                            Id = (int)dataReader["Id"],
-                            ParentId = (int)dataReader["Parent_Id"],
-                            Name = (string)dataReader["Name"],
-                            Comment = dataReader["Comment"] == DBNull.Value ? string.Empty : (string)dataReader["Comment"],
-                        };
-                        listStructure.Add(structure);
-                    }
-                }
-                dataReader.Close();
-                conn.Close();
-            }
-            catch (MySqlException ex)
-            {
-                throw new Exception("Произошла ошибка при подключении к nsi_expence_structure : " + ex.ToString());
-            }
-
-            // и еще необходимо отсортировать по правильным вложенным подкатегориям
-            listStructure = SortingAtListOperation(listStructure);
-
-            // сказали ответ
-            return listStructure;
-        }
-
-        public static int GetIdExpenceOperationbyName(string operationName, int idBill)
-        {
-            // Если запись есть в БД - вернет её Id, иначе вернет -1
-            var idOperation = -1;
-            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
-                             "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
-
-            try
-            {
-                var conn = new MySqlConnection(connString);
-                conn.Open();
-                var query = "SELECT * FROM nsi_expence_structure WHERE " +
-                            "nsi_expence_structure.Name = '" + operationName + "'";
-                var command = new MySqlCommand(query) { Connection = conn };
-                var dataReader = command.ExecuteReader();
-                if (dataReader.Read())
-                {
-                    if ((int)dataReader["Bill_Id"] == '0' || (int)dataReader["Bill_Id"] == idBill) 
-                        idOperation = (int)dataReader["Id"];
-                }
-                dataReader.Close();
-                conn.Close();
-            }
-            catch (MySqlException ex)
-            {
-                throw new Exception("Произошла ошибка при подключении к nsi_expence_structure : " + ex.ToString());
+                throw new Exception("Произошла ошибка при подключении к " + nameTable + " : " + ex.ToString());
             }
 
             return idOperation;

@@ -58,12 +58,12 @@ namespace myFinances
             var index = -1;
             if (parentForm.button1.Capture)
             {
-                listOperation = LoadDataDB.GetListIncomeOperation(SelectedIdBill);
+                listOperation = LoadDataDB.GetListOperation(SelectedIdBill, "Добавить доход");
                 index = Globals.DefaultIdIncome;
             }
             else if (parentForm.button2.Capture)
             {
-                listOperation = LoadDataDB.GetListExpenceOperation(SelectedIdBill);
+                listOperation = LoadDataDB.GetListOperation(SelectedIdBill, "Отметить расход");
                 index = Globals.DefaultIdExpence;
             }
             foreach (var operation in listOperation) comboBox1.Items.Add(operation.Name);
@@ -127,6 +127,7 @@ namespace myFinances
                 if (resultOperation.Equals("Success"))
                 {
                     MessageSender.SendMessage(this, "Данные успешно внесены", "Успешно");
+                    Close();
                 }
                 else
                 {
@@ -150,7 +151,7 @@ namespace myFinances
             if (comboBox1.SelectedIndex != -1)
                 if (comboBox1.Items[comboBox1.SelectedIndex].Equals(NewOperationText))
                 {
-                    var newForm = new AddingNewIncomeGroup();
+                    var newForm = new AddingNewOperationGroup();
                     newForm.StartPosition = FormStartPosition.CenterParent;
                     newForm.ShowDialog();
                     // Перезаполнили значения

@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace myFinances
 {
-    public partial class AddingNewIncomeGroup : Form
+    public partial class AddingNewOperationGroup : Form
     {
-        public AddingNewIncomeGroup()
+        public AddingNewOperationGroup()
         {
             InitializeComponent();
         }

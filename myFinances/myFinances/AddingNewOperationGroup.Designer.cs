@@ -1,6 +1,6 @@
 ﻿namespace myFinances
 {
-    partial class AddingNewIncomeGroup
+    partial class AddingNewOperationGroup
     {
         /// <summary>
         /// Required designer variable.
