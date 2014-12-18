@@ -27,7 +27,7 @@ namespace myFinances
                 dataReader.Close();
                 conn.Close();
             }
-            catch (MySqlException ex)
+            catch (MySqlException)
             {
                 flag = false;
             }
@@ -209,7 +209,7 @@ namespace myFinances
         #endregion
 
         #region Load Data - Find record by Parameters
-        public static int GetIdBillbyName(string billName)
+        public static int GetIdBillbyName(string nameBill)
         {
             // Если запись есть в БД - вернет её Id, иначе вернет -1
             var idBill = -1;
@@ -220,7 +220,7 @@ namespace myFinances
             {
                 var conn = new MySqlConnection(connString);
                 conn.Open();
-                var query = "SELECT * FROM  nsi_bill  WHERE Name = '" + billName + "'";
+                var query = "SELECT * FROM  nsi_bill  WHERE Name = '" + nameBill + "'";
                 var command = new MySqlCommand(query) { Connection = conn };
                 var dataReader = command.ExecuteReader();
                 while (dataReader.Read())
@@ -238,7 +238,7 @@ namespace myFinances
             return idBill;
         }
 
-        public static int GetIdOperationbyName(string nameOperation, int idBill, string typeOperation)
+        public static int GetIdOperationbyName(string nameOperation, string typeOperation)
         {
             var nameTable = string.Empty;
             if (typeOperation.Equals("Добавить доход")) nameTable = "nsi_income_structure";
@@ -246,6 +246,8 @@ namespace myFinances
             else return -1;
 
 
+            while (nameOperation[0] == ' ')
+            nameOperation = nameOperation.Substring(1, nameOperation.Length - 1);
             // Если запись есть в БД - вернет её Id, иначе вернет -1
             var idOperation = -1;
             var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
@@ -260,8 +262,7 @@ namespace myFinances
                 var dataReader = command.ExecuteReader();
                 if (dataReader.Read())
                 {
-                    if ((int)dataReader["Bill_Id"] == 0 || (int)dataReader["Bill_Id"] == idBill)
-                        idOperation = (int)dataReader["Id"];
+                    idOperation = (int)dataReader["Id"];
                 }
                 dataReader.Close();
                 conn.Close();

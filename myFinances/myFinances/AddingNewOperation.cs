@@ -70,7 +70,8 @@ namespace myFinances
                 }
             }
             foreach (var operation in listOperation) comboBox1.Items.Add(operation.Name);
-            comboBox1.SelectedIndex = index;
+            if (index < comboBox1.Items.Count) comboBox1.SelectedIndex = index;
+            else comboBox1.SelectedIndex = -1;
 
             button1.Select();
         }

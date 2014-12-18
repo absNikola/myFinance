@@ -36,14 +36,18 @@ namespace myFinances
             }
             else
             {
-                // Затем добавить запись в БД
-                var bill = new BillDto()
+                if (ManageDb.CheckConnectionDb())
                 {
-                    Name = textBox1.Text,
-                    Comment = textBox2.Text,
-                };
-                var saveBillResult = ManageDb.SaveBilltoDb(bill);
-                if (!saveBillResult.Equals("Success")) MessageSender.SendMessage(this, saveBillResult, "Успешно");
+                    // Затем добавить запись в БД
+                    var bill = new BillDto()
+                    {
+                        Name = textBox1.Text,
+                        Comment = textBox2.Text,
+                    };
+                    var saveBillResult = ManageDb.SaveBilltoDb(bill);
+                    if (!saveBillResult.Equals("Success")) MessageSender.SendMessage(this, saveBillResult, "Ошибка");
+                }
+                else MessageSender.SendMessage(this, "Проверьте настройки подключения", "Ошибка");
                 Close();
             }
         }

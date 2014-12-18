@@ -77,7 +77,9 @@ namespace myFinances
             comboBox2.Items.Clear();
             if (ManageDb.CheckConnectionDb())
             {
-                var listOperation = ManageDb.GetListOperation(-1, "Добавить доход");
+                var listOperation = ManageDb.GetListOperation(
+                    ManageDb.GetIdBillbyName(this.comboBox1.Items[comboBox1.SelectedIndex].ToString()), 
+                    "Добавить доход");
                 foreach (var operation in listOperation) comboBox2.Items.Add(operation.Name);
             }
 
@@ -96,7 +98,9 @@ namespace myFinances
             comboBox3.Items.Clear();
             if (ManageDb.CheckConnectionDb())
             {
-                var listOperation = ManageDb.GetListOperation(-1, "Отметить расход");
+                var listOperation = ManageDb.GetListOperation(
+                    ManageDb.GetIdBillbyName(this.comboBox1.Items[comboBox1.SelectedIndex].ToString()), 
+                    "Отметить расход");
                 foreach (var operation in listOperation) comboBox3.Items.Add(operation.Name);
             }
 
@@ -181,10 +185,10 @@ namespace myFinances
                 new XElement("DbUserName", this.textBox4.Text),
                 new XElement("DbUserPassword", this.textBox5.Text));
 
-            var xSettings = new XElement("defaultSettings", 
-                new XElement("DefaultIdBill", Globals.DefaultIdBill),
-                new XElement("DefaultIdIncome", Globals.DefaultIdIncome),
-                new XElement("DefaultIdExpence", Globals.DefaultIdExpence));
+            var xSettings = new XElement("defaultSettings",
+                new XElement("DefaultIdBill", ManageDb.GetIdBillbyName(this.comboBox1.Items[comboBox1.SelectedIndex].ToString())),
+                new XElement("DefaultIdIncome", ManageDb.GetIdOperationbyName(this.comboBox2.Items[comboBox2.SelectedIndex].ToString(), "Добавить доход")),
+                new XElement("DefaultIdExpence", ManageDb.GetIdOperationbyName(this.comboBox3.Items[comboBox3.SelectedIndex].ToString(), "Отметить расход")));
 
             var doc = new XDocument(new XDeclaration("1.0", "utf-8", null), new XElement("settings", xConnection, xSettings));
 

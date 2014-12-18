@@ -1,15 +1,1 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
-<settings>
-    <connection>
-        <ServerName>bogoyavlensky.dlinkddns.com</ServerName>
-        <ServerPort>3306</ServerPort>
-        <DbName>financialDB</DbName>
-        <DbUserName>root</DbUserName>  
-        <DbUserPassword>123</DbUserPassword>
-    </connection>
-    <defaultSettings>
-        <DefaultIdBill>2</DefaultIdBill>
-        <DefaultIdIncome>2</DefaultIdIncome>
-        <DefaultIdExpence>9</DefaultIdExpence>
-    </defaultSettings>
-</settings>
+<?xml version="1.0" encoding="utf-8"?><settings><connection><ServerName>bogoyavlensky.dlinkddns.com</ServerName><ServerPort>3306</ServerPort><DbName>financialDB</DbName><DbUserName>root</DbUserName><DbUserPassword>123</DbUserPassword></connection><defaultSettings><DefaultIdBill>1</DefaultIdBill><DefaultIdIncome>4</DefaultIdIncome><DefaultIdExpence>1</DefaultIdExpence></defaultSettings></settings>
