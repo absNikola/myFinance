@@ -7,8 +7,93 @@ using MySql.Data.MySqlClient;
 
 namespace myFinances
 {
-    class LoadDataDB
+    class ManageDb
     {
+        public static bool CheckConnectionDb()
+        {
+            // Изначально считаем что все настройки указаны корректно
+            var flag = true;
+
+            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
+                             "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
+            try
+            {
+                var conn = new MySqlConnection(connString);
+                conn.Open();
+                var query = "SELECT * FROM nsi_bill ";
+                var command = new MySqlCommand(query) { Connection = conn };
+                var dataReader = command.ExecuteReader();
+                flag = true;
+                dataReader.Close();
+                conn.Close();
+            }
+            catch (MySqlException ex)
+            {
+                flag = false;
+            }
+
+            return flag;
+        }
+
+        #region Save Data
+        public static string SaveBilltoDb(BillDto bill)
+        {
+            var result = "Success";
+            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
+                             "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
+
+            try
+            {
+                var conn = new MySqlConnection(connString);
+                conn.Open();
+                var command = conn.CreateCommand();
+                command.CommandText = "INSERT INTO nsi_bill (Name, Comment) VALUES(?name, ?comment)";
+                command.Parameters.Add("?name", MySqlDbType.VarChar).Value = bill.Name;
+                command.Parameters.Add("?comment", MySqlDbType.VarChar).Value = bill.Comment;
+                command.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (MySqlException ex)
+            {
+                result = "Произошла ошибка при подключении к nsi_bill : " + ex.ToString();
+            }
+
+            return result;
+        }
+        public static string SaveOperationtoDb(OperationDto operation, string nameOperation)
+        {
+            var nameTable = string.Empty;
+            if (nameOperation.Equals("Добавить доход")) nameTable = "income";
+            else if (nameOperation.Equals("Отметить расход")) nameTable = "expence";
+            else return "Не определен тип операции";
+
+            var result = "Success";
+            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
+                             "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
+
+            try
+            {
+                var conn = new MySqlConnection(connString);
+                conn.Open();
+                var command = conn.CreateCommand();
+                command.CommandText = "INSERT INTO " + nameTable + " (Bill_Id, Amount, Date, Comment) VALUES(?billId, ?amount, ?date, ?comment)";
+                command.Parameters.Add("?billId", MySqlDbType.Int32).Value = operation.IdBill;
+                command.Parameters.Add("?amount", MySqlDbType.Int64).Value = operation.Amount;
+                command.Parameters.Add("?date", MySqlDbType.DateTime).Value = operation.Date;
+                command.Parameters.Add("?comment", MySqlDbType.VarChar).Value = operation.Comment;
+                command.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (MySqlException ex)
+            {
+                result = "Произошла ошибка при подключении к income : " + ex.ToString();
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region Load Data - Get full Lists
         public static List<StructureDto> FindChildrenAtListOperation(StructureDto parent, List<StructureDto> listStructure, string prefix)
         {
             var listOfChildren = new List<StructureDto>();
@@ -60,14 +145,15 @@ namespace myFinances
                 var dataReader = command.ExecuteReader();
                 while (dataReader.Read())
                 {
-                    if ((int)dataReader["Bill_Id"] == 0 || (int)dataReader["Bill_Id"] == idBill)
+                    if ((int) dataReader["Bill_Id"] == 0 || (int) dataReader["Bill_Id"] == idBill || idBill == -1)
                     {
                         var structure = new StructureDto()
                         {
-                            Id = (int)dataReader["Id"],
-                            ParentId = (int)dataReader["Parent_Id"],
-                            Name = (string)dataReader["Name"],
-                            Comment = dataReader["Comment"] == DBNull.Value ? string.Empty : (string)dataReader["Comment"],
+                            Id = (int) dataReader["Id"],
+                            ParentId = (int) dataReader["Parent_Id"],
+                            Name = (string) dataReader["Name"],
+                            Comment =
+                                dataReader["Comment"] == DBNull.Value ? string.Empty : (string) dataReader["Comment"],
                         };
                         listStructure.Add(structure);
                     }
@@ -120,7 +206,9 @@ namespace myFinances
 
             return listBill;
         }
+        #endregion
 
+        #region Load Data - Find record by Parameters
         public static int GetIdBillbyName(string billName)
         {
             // Если запись есть в БД - вернет её Id, иначе вернет -1
@@ -132,10 +220,10 @@ namespace myFinances
             {
                 var conn = new MySqlConnection(connString);
                 conn.Open();
-                var query = "SELECT * FROM nsi_bill WHERE nsi_bill.Name = '" + billName + "'";
+                var query = "SELECT * FROM  nsi_bill  WHERE Name = '" + billName + "'";
                 var command = new MySqlCommand(query) { Connection = conn };
                 var dataReader = command.ExecuteReader();
-                if (dataReader.Read())
+                while (dataReader.Read())
                 {
                     idBill = (int)dataReader["Id"];
                 }
@@ -185,5 +273,6 @@ namespace myFinances
 
             return idOperation;
         }
+        #endregion
     }
 }

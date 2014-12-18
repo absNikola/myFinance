@@ -32,12 +32,15 @@ namespace myFinances
             comboBox1.Items.Clear();
             comboBox1.Items.Add(NewBillText);
             comboBox1.Items.Add(NewBillSeparator);
-            var listBill = LoadDataDB.GetListBill();
-            foreach (var bill in listBill) comboBox1.Items.Add(bill.Name);
+            if (ManageDb.CheckConnectionDb())
+            {
+                var listBill = ManageDb.GetListBill();
+                foreach (var bill in listBill) comboBox1.Items.Add(bill.Name);
+            }
 
-            
+            // поскольку нумерация с нуля и +2 элемента
             if (comboBox1.Items.Count == 2) comboBox1.SelectedIndex = -1; 
-            else comboBox1.SelectedIndex = Globals.DefaultIdBill;
+            else comboBox1.SelectedIndex = Globals.DefaultIdBill + 1;
 
             button1.Select();
         }
@@ -54,7 +57,7 @@ namespace myFinances
             }
             else
             {
-                if (LoadDataDB.GetIdBillbyName(comboBox1.Items[comboBox1.SelectedIndex].ToString()) != -1)
+                if (ManageDb.GetIdBillbyName(comboBox1.Items[comboBox1.SelectedIndex].ToString()) != -1)
                 {
                     // Здесь необходимо добавить запись в БД
                     var newForm = new AddingNewOperation()
@@ -94,7 +97,7 @@ namespace myFinances
             }
             else
             {
-                if (LoadDataDB.GetIdBillbyName(comboBox1.Items[comboBox1.SelectedIndex].ToString()) != -1)
+                if (ManageDb.GetIdBillbyName(comboBox1.Items[comboBox1.SelectedIndex].ToString()) != -1)
                 {
                     // Здесь необходимо добавить запись в БД
                     var newForm = new AddingNewOperation()
@@ -117,6 +120,9 @@ namespace myFinances
                 StartPosition = FormStartPosition.CenterParent,
             };
             newForm.ShowDialog();
+
+            ManageSetting.ReadSetting();
+            comboBox1_SetData();
         }
     }
 }

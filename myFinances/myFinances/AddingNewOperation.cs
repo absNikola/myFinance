@@ -24,7 +24,7 @@ namespace myFinances
 
             var parentForm = Application.OpenForms[0] as MainForm;
             var index = parentForm.comboBox1.SelectedIndex;
-            SelectedIdBill = LoadDataDB.GetIdBillbyName(parentForm.comboBox1.Items[index].ToString());
+            SelectedIdBill = ManageDb.GetIdBillbyName(parentForm.comboBox1.Items[index].ToString());
 
             InitializeData();
         }
@@ -56,15 +56,18 @@ namespace myFinances
             var listOperation = new List<StructureDto>();
             var parentForm = Application.OpenForms[0] as MainForm;
             var index = -1;
-            if (parentForm.button1.Capture)
+            if (ManageDb.CheckConnectionDb())
             {
-                listOperation = LoadDataDB.GetListOperation(SelectedIdBill, "Добавить доход");
-                index = Globals.DefaultIdIncome;
-            }
-            else if (parentForm.button2.Capture)
-            {
-                listOperation = LoadDataDB.GetListOperation(SelectedIdBill, "Отметить расход");
-                index = Globals.DefaultIdExpence;
+                if (parentForm.button1.Capture)
+                {
+                    listOperation = ManageDb.GetListOperation(SelectedIdBill, "Добавить доход");
+                    index = Globals.DefaultIdIncome + 1;
+                }
+                else if (parentForm.button2.Capture)
+                {
+                    listOperation = ManageDb.GetListOperation(SelectedIdBill, "Отметить расход");
+                    index = Globals.DefaultIdExpence + 1;
+                }
             }
             foreach (var operation in listOperation) comboBox1.Items.Add(operation.Name);
             comboBox1.SelectedIndex = index;
@@ -91,7 +94,7 @@ namespace myFinances
             }
 
             // Тут проверяем строку на длину
-            if (textBox1.Text.Length > 12) textBox1.Text = tmpString.Substring(0, 12);
+            if (textBox1.Text.Length > 12) textBox1.Text = textBox1.Text.Substring(0, 12);
             textBox1.SelectionStart = textBox1.Text.Length;
         }
 
@@ -123,7 +126,7 @@ namespace myFinances
                 };
                 if (checkBox1.Checked) newOperation.Date = DateTime.Today;
                 else newOperation.Date = dateTimePicker1.Value;
-                var resultOperation = SaveDataDB.SaveOperationtoDb(newOperation, this.Text);
+                var resultOperation = ManageDb.SaveOperationtoDb(newOperation, this.Text);
                 if (resultOperation.Equals("Success"))
                 {
                     MessageSender.SendMessage(this, "Данные успешно внесены", "Успешно");

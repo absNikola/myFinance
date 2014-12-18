@@ -64,7 +64,7 @@ namespace myFinances
 
     static class Program
     {
-        private static void InitData()
+        private static void InitSetting()
         {
             try
             {
@@ -91,7 +91,7 @@ namespace myFinances
         [STAThread]
         static void Main()
         {
-            InitData();
+            ManageSetting.ReadSetting();
 
             // Запуск приложения
             Application.EnableVisualStyles();

@@ -42,7 +42,7 @@ namespace myFinances
                     Name = textBox1.Text,
                     Comment = textBox2.Text,
                 };
-                var saveBillResult = SaveDataDB.SaveBilltoDb(bill);
+                var saveBillResult = ManageDb.SaveBilltoDb(bill);
                 if (!saveBillResult.Equals("Success")) MessageSender.SendMessage(this, saveBillResult, "Успешно");
                 Close();
             }
