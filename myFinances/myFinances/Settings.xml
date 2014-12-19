@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
 <settings>
     <connection>
-        <ServerName>bogoyavlensky.dlinkddns.com</ServerName>
+        <ServerName>localhost</ServerName>
         <ServerPort>3306</ServerPort>
         <DbName>financialDB</DbName>
         <DbUserName>root</DbUserName>  

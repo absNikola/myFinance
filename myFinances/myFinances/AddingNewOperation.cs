@@ -38,16 +38,23 @@ namespace myFinances
 
             if (ManageDb.CheckConnectionDb())
             {
-                var   listOperation = ManageDb.GetListOperation(idBill, this.Text);
+                var listOperation = ManageDb.GetListOperation(idBill, this.Text);
                 foreach (var operation in listOperation)
                     comboBox1.Items.Add(new KeyValuePair<int, string>(operation.Id, operation.Name));
             }
 
 
             // Определяем активный выбор строки
+            var idOperation = -1;
+            for (var i=0; i < Globals.DefaultId.Count; i++)
+                if (Globals.DefaultId[i].IdBill == idBill) 
+                {
+                    if (this.Text == "Добавить доход") idOperation = Globals.DefaultId[i].IdIncomeOperation;
+                    if (this.Text == "Отметить расход") idOperation = Globals.DefaultId[i].IdExpenseOperation;
+                }
             var index = -1;
             for (var i = 0; i < this.comboBox1.Items.Count; i++)
-                if (((KeyValuePair<int, string>)this.comboBox1.Items[i]).Key == idBill)
+                if (((KeyValuePair<int, string>)this.comboBox1.Items[i]).Key == idOperation)
                     index = i;
             comboBox1.SelectedIndex = index;
             button1.Select();
@@ -99,9 +106,6 @@ namespace myFinances
         private void button1_Click(object sender, EventArgs e)
         {
             var parentForm = Application.OpenForms[0] as MainForm;
-            var idBill = -1;
-            if (parentForm.comboBox1.SelectedIndex >= 0)
-                idBill = ((KeyValuePair<int, string>)parentForm.comboBox1.Items[parentForm.comboBox1.SelectedIndex]).Key;
             var idOperation = -1;
             if (this.comboBox1.SelectedIndex >= 0)
                 idOperation = ((KeyValuePair<int, string>) comboBox1.Items[comboBox1.SelectedIndex]).Key;
