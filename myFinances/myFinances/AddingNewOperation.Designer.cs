@@ -141,6 +141,7 @@
             this.MinimizeBox = false;
             this.Name = "AddingNewOperation";
             this.Text = "Тип операции";
+            this.Load += new System.EventHandler(this.AddingNewOperation_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

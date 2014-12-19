@@ -57,3 +57,4 @@ C:\Git_mine\myFinance\myFinances\myFinances\obj\Debug\myFinances.MainForm.resour
 C:\Git_mine\myFinance\myFinances\myFinances\obj\Debug\myFinances.OptionsWindow.resources
 C:\Git_mine\myFinance\myFinances\myFinances\obj\Debug\myFinances.Properties.Resources.resources
 C:\Git_mine\myFinance\myFinances\myFinances\obj\Debug\myFinances.csproj.GenerateResource.Cache
+C:\Git_mine\myFinance\myFinances\myFinances\obj\Debug\myFinances.AddingNewOperationGroup.resources

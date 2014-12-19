@@ -18,9 +18,21 @@ namespace myFinances
         public static string ErrorText { get; set; }
 
 
+
         public static int DefaultIdBill { get; set; }
-        public static int DefaultIdIncome { get; set; }
-        public static int DefaultIdExpence { get; set; }
+        public static List<SettingDto> DefaultId { get; set; }
+    }
+
+    public class GroupDto
+    {
+
+    }
+
+    public class SettingDto
+    {
+        public int IdBill { get; set; }
+        public int IdIncomeOperation { get; set; }
+        public int IdExpenseOperation { get; set; }
     }
 
     public class BillDto
@@ -34,6 +46,7 @@ namespace myFinances
     {
         public int Id { get; set; }
         public int ParentId { get; set; }
+        public int IdBill { get; set; }
         public string Name { get; set; }
         public string Comment { get; set; }
     }
@@ -41,7 +54,7 @@ namespace myFinances
     public class OperationDto
     {
         public int Id { get; set; }
-        public int IdBill { get; set; }
+        public int IdOperation { get; set; }
         public long Amount { get; set; }
         public DateTime Date { get; set; }
         public string Comment { get; set; }
@@ -64,30 +77,6 @@ namespace myFinances
 
     static class Program
     {
-        private static void InitSetting()
-        {
-            try
-            {
-                var document = XDocument.Load("Settings.xml");
-                Globals.ServerName = document.Descendants("ServerName").First().Value;
-                Globals.ServerPort = Convert.ToInt32(document.Descendants("ServerPort").First().Value);
-
-                Globals.DbName = document.Descendants("DbName").First().Value;
-                Globals.DbUserName = document.Descendants("DbUserName").First().Value;
-                Globals.DbUserPassword = document.Descendants("DbUserPassword").First().Value;
-
-                Globals.DefaultIdBill = Convert.ToInt32(document.Descendants("DefaultIdBill").First().Value);
-                Globals.DefaultIdExpence = Convert.ToInt32(document.Descendants("DefaultIdExpence").First().Value);
-                Globals.DefaultIdIncome = Convert.ToInt32(document.Descendants("DefaultIdIncome").First().Value);
-            }
-            catch(Exception ex)
-            {
-                throw new Exception("Что-то пошло не так при считывании настроек: " + ex.Message);
-            }
-
-            Globals.ErrorText = "Что-то пошло не так";
-        }
-
         [STAThread]
         static void Main()
         {

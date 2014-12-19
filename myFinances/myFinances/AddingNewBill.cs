@@ -13,6 +13,8 @@ namespace myFinances
 {
     public partial class AddingNewBill : Form
     {
+        private int MaxLenghtTextField = 28;
+
         public AddingNewBill()
         {
             InitializeComponent();
@@ -45,7 +47,8 @@ namespace myFinances
                         Comment = textBox2.Text,
                     };
                     var saveBillResult = ManageDb.SaveBilltoDb(bill);
-                    if (!saveBillResult.Equals("Success")) MessageSender.SendMessage(this, saveBillResult, "Ошибка");
+                    if (!saveBillResult.Equals("Success")) 
+                        MessageSender.SendMessage(this, saveBillResult, "Ошибка");
                 }
                 else MessageSender.SendMessage(this, "Проверьте настройки подключения", "Ошибка");
                 Close();
@@ -54,21 +57,15 @@ namespace myFinances
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            var tmpString = textBox1.Text;
-            var tmpLenght = textBox1.Text.Length;
-            if (tmpString.Length > 28) tmpLenght = 28;
-
-            textBox1.Text = tmpString.Substring(0, tmpLenght);
+            if (textBox1.Text.Length > MaxLenghtTextField)
+                textBox1.Text = textBox1.Text.Substring(0, MaxLenghtTextField);
             textBox1.SelectionStart = textBox1.Text.Length;
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
-            var tmpString = textBox2.Text;
-            var tmpLenght = textBox2.Text.Length;
-            if (tmpString.Length > 28) tmpLenght = 28;
-
-            textBox2.Text = tmpString.Substring(0, tmpLenght);
+            if (textBox2.Text.Length > MaxLenghtTextField)
+                textBox2.Text = textBox2.Text.Substring(0, MaxLenghtTextField);
             textBox2.SelectionStart = textBox2.Text.Length;
         }
     }

@@ -35,6 +35,61 @@ namespace myFinances
             return flag;
         }
 
+        public static bool IsBillExist(int idBill)
+        {
+            var result = false;
+            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
+                             "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
+            try
+            {
+                var conn = new MySqlConnection(connString);
+                conn.Open();
+                var query = "SELECT * FROM  nsi_bill  WHERE Id = '" + idBill + "'";
+                var command = new MySqlCommand(query) { Connection = conn };
+                var dataReader = command.ExecuteReader();
+                if (dataReader.Read()) result = true;
+                dataReader.Close();
+                conn.Close();
+            }
+            catch (MySqlException ex)
+            {
+                throw new Exception("Произошла ошибка при подключении к nsi_bill : " + ex.ToString());
+            }
+            return result;
+        }
+
+        public static bool IsOperationBelongBill(int idOperation, int idBill, string typeOperation)
+        {
+            var nameTable = string.Empty;
+            if (typeOperation.Equals("Добавить доход")) nameTable = "nsi_income_structure";
+            else if (typeOperation.Equals("Отметить расход")) nameTable = "nsi_expence_structure";
+                 else return false;
+            
+            var result = false;
+            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
+                             "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
+            try
+            {
+                var conn = new MySqlConnection(connString);
+                conn.Open();
+                var query = "SELECT * FROM " + nameTable + " WHERE " + nameTable + ".Id = '" + idOperation + "'";
+                var command = new MySqlCommand(query) { Connection = conn };
+                var dataReader = command.ExecuteReader();
+                if (dataReader.Read())
+                {
+                    var operation_bill_id = (int) dataReader["Bill_Id"];
+                    if (operation_bill_id == idBill || operation_bill_id == 0) result = true;
+                }
+                dataReader.Close();
+                conn.Close();
+            }
+            catch (MySqlException ex)
+            {
+                throw new Exception("Произошла ошибка при подключении к " + nameTable + " : " + ex.ToString());
+            }
+            return result;
+        }
+
         #region Save Data
         public static string SaveBilltoDb(BillDto bill)
         {
@@ -60,6 +115,40 @@ namespace myFinances
 
             return result;
         }
+
+        public static string SaveStructuretoDb(StructureDto structure, string typeOperation)
+        {
+            var nameTable = string.Empty;
+            if (typeOperation.Equals("Добавить доход")) nameTable = "nsi_income_structure";
+            else if (typeOperation.Equals("Отметить расход")) nameTable = "nsi_expence_structure";
+            else return "Не определен тип операции";
+
+
+            var result = "Success";
+            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
+                             "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
+
+            try
+            {
+                var conn = new MySqlConnection(connString);
+                conn.Open();
+                var command = conn.CreateCommand();
+                command.CommandText = "INSERT INTO "+ nameTable +" (Parent_Id, Bill_Id, Name, Comment) VALUES(?idParent, ?idBill, ?name, ?comment)";
+                command.Parameters.Add("?idParent", MySqlDbType.Int32).Value = structure.ParentId;
+                command.Parameters.Add("?idBill", MySqlDbType.Int32).Value = structure.IdBill;
+                command.Parameters.Add("?name", MySqlDbType.VarChar).Value = structure.Name;
+                command.Parameters.Add("?comment", MySqlDbType.VarChar).Value = structure.Comment;
+                command.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (MySqlException ex)
+            {
+                result = "Произошла ошибка при подключении к " + nameTable + " : " + ex.ToString();
+            }
+
+            return result;
+        }
+
         public static string SaveOperationtoDb(OperationDto operation, string nameOperation)
         {
             var nameTable = string.Empty;
@@ -76,8 +165,8 @@ namespace myFinances
                 var conn = new MySqlConnection(connString);
                 conn.Open();
                 var command = conn.CreateCommand();
-                command.CommandText = "INSERT INTO " + nameTable + " (Bill_Id, Amount, Date, Comment) VALUES(?billId, ?amount, ?date, ?comment)";
-                command.Parameters.Add("?billId", MySqlDbType.Int32).Value = operation.IdBill;
+                command.CommandText = "INSERT INTO " + nameTable + " (Operation_Id, Amount, Date, Comment) VALUES(?operationId, ?amount, ?date, ?comment)";
+                command.Parameters.Add("?operationId", MySqlDbType.Int32).Value = operation.IdOperation;
                 command.Parameters.Add("?amount", MySqlDbType.Int64).Value = operation.Amount;
                 command.Parameters.Add("?date", MySqlDbType.DateTime).Value = operation.Date;
                 command.Parameters.Add("?comment", MySqlDbType.VarChar).Value = operation.Comment;
@@ -145,18 +234,20 @@ namespace myFinances
                 var dataReader = command.ExecuteReader();
                 while (dataReader.Read())
                 {
-                    if ((int) dataReader["Bill_Id"] == 0 || (int) dataReader["Bill_Id"] == idBill || idBill == -1)
-                    {
-                        var structure = new StructureDto()
+                    if (idBill != -1)
+                        if ((int) dataReader["Bill_Id"] == 0 || (int) dataReader["Bill_Id"] == idBill)
                         {
-                            Id = (int) dataReader["Id"],
-                            ParentId = (int) dataReader["Parent_Id"],
-                            Name = (string) dataReader["Name"],
-                            Comment =
-                                dataReader["Comment"] == DBNull.Value ? string.Empty : (string) dataReader["Comment"],
-                        };
-                        listStructure.Add(structure);
-                    }
+                            var structure = new StructureDto()
+                            {
+                                Id = (int) dataReader["Id"],
+                                ParentId = (int) dataReader["Parent_Id"],
+                                IdBill = (int)dataReader["Bill_Id"],
+                                Name = (string) dataReader["Name"],
+                                Comment =
+                                    dataReader["Comment"] == DBNull.Value ? string.Empty : (string) dataReader["Comment"],
+                            };
+                            listStructure.Add(structure);
+                        }
                 }
                 dataReader.Close();
                 conn.Close();

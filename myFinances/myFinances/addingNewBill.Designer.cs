@@ -105,7 +105,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "AddingNewBill";
-            this.Text = "Добавление счёта";
+            this.Text = "Добавить новый счёт";
             this.ResumeLayout(false);
             this.PerformLayout();
 

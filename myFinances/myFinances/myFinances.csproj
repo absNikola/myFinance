@@ -99,6 +99,9 @@
     <EmbeddedResource Include="AddingNewOperation.resx">
       <DependentUpon>AddingNewOperation.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AddingNewOperationGroup.resx">
+      <DependentUpon>AddingNewOperationGroup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MessageWindow.resx">
       <DependentUpon>MessageWindow.cs</DependentUpon>
     </EmbeddedResource>

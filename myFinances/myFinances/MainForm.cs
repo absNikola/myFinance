@@ -15,14 +15,14 @@ namespace myFinances
 {
     public partial class MainForm : Form
     {
-        public string NewBillText = "< Добавить новый счёт >";
-        public string NewBillSeparator = "-----------------------------------------------------";
+        private KeyValuePair<int, string> NewBillText = new KeyValuePair<int, string>(-2, "< Добавить новый счёт >");
+        private KeyValuePair<int, string> NewBillSeparator = new KeyValuePair<int, string>(0, "-----------------------------------------------------");
+
         public MainForm()
         {
             InitializeComponent();
-
-            // Значения в выпадашку
             comboBox1_SetData();
+            comboBox1.DisplayMember = "Value";
             label1.Text = "Выберите счёт";
         }
 
@@ -32,16 +32,20 @@ namespace myFinances
             comboBox1.Items.Clear();
             comboBox1.Items.Add(NewBillText);
             comboBox1.Items.Add(NewBillSeparator);
+
             if (ManageDb.CheckConnectionDb())
             {
                 var listBill = ManageDb.GetListBill();
-                foreach (var bill in listBill) comboBox1.Items.Add(bill.Name);
+                foreach (var bill in listBill) 
+                    comboBox1.Items.Add(new KeyValuePair<int, string>(bill.Id, bill.Name));
             }
 
-            // поскольку нумерация с нуля и +2 элемента
-            if (comboBox1.Items.Count == 2) comboBox1.SelectedIndex = -1; 
-            else comboBox1.SelectedIndex = Globals.DefaultIdBill + 1;
-
+            // Определяем активный выбор строки
+            var index = -1;
+            for (var i = 0; i<comboBox1.Items.Count; i++)
+                if (((KeyValuePair<int, string>) comboBox1.Items[i]).Key == Globals.DefaultIdBill) 
+                    index = i;
+            comboBox1.SelectedIndex = index;
             button1.Select();
         }
 
@@ -51,13 +55,17 @@ namespace myFinances
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedIndex == -1)
-            {
+            if (comboBox1.SelectedIndex == -1) 
                 MessageSender.SendMessage(this, "Не выбран счёт для совершения операций", "Ошибка");
-            }
             else
             {
-                if (ManageDb.GetIdBillbyName(comboBox1.Items[comboBox1.SelectedIndex].ToString()) != -1)
+                // Проверяем что для выбранной строки есть запись в БД
+                var listBill = ManageDb.GetListBill();
+                var flag = false;
+                foreach (var bill in listBill)
+                    if (bill.Id == ((KeyValuePair<int, string>)comboBox1.Items[comboBox1.SelectedIndex]).Key) flag = true;
+
+                if (flag)
                 {
                     // Здесь необходимо добавить запись в БД
                     var newForm = new AddingNewOperation()
@@ -66,9 +74,8 @@ namespace myFinances
                         StartPosition = FormStartPosition.CenterParent,
                     };
                     newForm.ShowDialog();
-                }
-                else MessageSender.SendMessage(this, "           Выбран несуществующий счёт \n" +
-                                                 "               для совершения операций", "Ошибка");
+                }else MessageSender.SendMessage(this, "           Выбран несуществующий счёт \n" +
+                                                 "               для совершения операций", "Ошибка");  
             }
         }
 
@@ -79,7 +86,7 @@ namespace myFinances
                     comboBox1.SelectedIndex = -1;
 
             if (comboBox1.SelectedIndex != -1)
-                if (comboBox1.Items[comboBox1.SelectedIndex].Equals(NewBillText))
+                if (((KeyValuePair<int, string>)comboBox1.Items[comboBox1.SelectedIndex]).Key == NewBillText.Key)
                 {
                     var newForm = new AddingNewBill();
                     newForm.StartPosition = FormStartPosition.CenterParent;
@@ -92,12 +99,16 @@ namespace myFinances
         private void button2_Click(object sender, EventArgs e)
         {
             if (comboBox1.SelectedIndex == -1)
-            {
                 MessageSender.SendMessage(this, "Не выбран счёт для совершения операций", "Ошибка");
-            }
             else
             {
-                if (ManageDb.GetIdBillbyName(comboBox1.Items[comboBox1.SelectedIndex].ToString()) != -1)
+                // Проверяем что для выбранной строки есть запись в БД
+                var listBill = ManageDb.GetListBill();
+                var flag = false;
+                foreach (var bill in listBill)
+                    if (bill.Id == ((KeyValuePair<int, string>)comboBox1.Items[comboBox1.SelectedIndex]).Key) flag = true;
+
+                if (flag)
                 {
                     // Здесь необходимо добавить запись в БД
                     var newForm = new AddingNewOperation()
@@ -108,7 +119,7 @@ namespace myFinances
                     newForm.ShowDialog();
                 }
                 else MessageSender.SendMessage(this, "           Выбран несуществующий счёт \n" +
-                                                 "               для совершения операций", "Ошибка");
+                                                "               для совершения операций", "Ошибка");
             }
         }
 

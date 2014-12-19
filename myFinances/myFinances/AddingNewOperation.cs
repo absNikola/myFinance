@@ -14,76 +14,56 @@ namespace myFinances
 {
     public partial class AddingNewOperation : Form
     {
-        public string NewOperationText = "< Добавить новую категорию >";
-        public string NewOperationSeparator = "-----------------------------------------------------";
-        public int SelectedIdBill = -1;
+        private KeyValuePair<int, string> NewOperationText = new KeyValuePair<int, string>(-2, "< Добавить новую категорию >");
+        private KeyValuePair<int, string> NewOperationSeparator = new KeyValuePair<int, string>(0, "-----------------------------------------------------");
+        public string NewOperationGroupName { get; set; }
 
         public AddingNewOperation()
         {
             InitializeComponent();
-
-            var parentForm = Application.OpenForms[0] as MainForm;
-            var index = parentForm.comboBox1.SelectedIndex;
-            SelectedIdBill = ManageDb.GetIdBillbyName(parentForm.comboBox1.Items[index].ToString());
-
-            InitializeData();
-        }
-
-        private void InitializeData() 
-        {
-            // Значения по-умолчанию
-            label1.Text = "Сумма";
-            label2.Text = "Комментарий";
-            textBox1.Text = "0";
-            textBox2.Text = string.Empty;
-            comboBox1_SetData();
-            dateTimePicker1.Value = DateTime.Now;
-
-            // Активность контролов
-            comboBox1.Select();
-            dateTimePicker1.Enabled = false;
-            checkBox1.Checked = true;
         }
 
         private void comboBox1_SetData()
         {
+            var parentForm = Application.OpenForms[0] as MainForm;
+            var idBill = -1;
+            if (parentForm.comboBox1.SelectedIndex >= 0)
+                idBill = ((KeyValuePair<int, string>)parentForm.comboBox1.Items[parentForm.comboBox1.SelectedIndex]).Key;
+
+
             // Перезаполнили значения в контроле
             comboBox1.Items.Clear();
-            //закомментировано тлк для отладки
             comboBox1.Items.Add(NewOperationText);
             comboBox1.Items.Add(NewOperationSeparator);
 
-            var listOperation = new List<StructureDto>();
-            var parentForm = Application.OpenForms[0] as MainForm;
-            var index = -1;
             if (ManageDb.CheckConnectionDb())
             {
-                if (parentForm.button1.Capture)
-                {
-                    listOperation = ManageDb.GetListOperation(SelectedIdBill, "Добавить доход");
-                    index = Globals.DefaultIdIncome + 1;
-                }
-                else if (parentForm.button2.Capture)
-                {
-                    listOperation = ManageDb.GetListOperation(SelectedIdBill, "Отметить расход");
-                    index = Globals.DefaultIdExpence + 1;
-                }
+                var   listOperation = ManageDb.GetListOperation(idBill, this.Text);
+                foreach (var operation in listOperation)
+                    comboBox1.Items.Add(new KeyValuePair<int, string>(operation.Id, operation.Name));
             }
-            foreach (var operation in listOperation) comboBox1.Items.Add(operation.Name);
-            if (index < comboBox1.Items.Count) comboBox1.SelectedIndex = index;
-            else comboBox1.SelectedIndex = -1;
 
+
+            // Определяем активный выбор строки
+            var index = -1;
+            for (var i = 0; i < this.comboBox1.Items.Count; i++)
+                if (((KeyValuePair<int, string>)this.comboBox1.Items[i]).Key == idBill)
+                    index = i;
+            comboBox1.SelectedIndex = index;
             button1.Select();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            if (textBox1.Text.Equals("")) textBox1.Text = "0";
+
             // Тут проверим что введены лишь цифры и выкинем лишнее
             var tmpString = string.Empty;
             var correctSymbols = "0123456789";
             for (var i = 0; i < textBox1.Text.Length; i++)
             {
-                if (correctSymbols.Contains(textBox1.Text[i].ToString())) tmpString += textBox1.Text[i].ToString();
+                if (correctSymbols.Contains(textBox1.Text[i].ToString())) 
+                    tmpString += textBox1.Text[i].ToString();
             }
             textBox1.Text = tmpString;
 
@@ -95,7 +75,8 @@ namespace myFinances
             }
 
             // Тут проверяем строку на длину
-            if (textBox1.Text.Length > 12) textBox1.Text = textBox1.Text.Substring(0, 12);
+            if (textBox1.Text.Length > 12) 
+                textBox1.Text = textBox1.Text.Substring(0, 12);
             textBox1.SelectionStart = textBox1.Text.Length;
         }
 
@@ -117,33 +98,40 @@ namespace myFinances
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (!textBox1.Text.Equals("0") && SelectedIdBill != -1)
+            var parentForm = Application.OpenForms[0] as MainForm;
+            var idBill = -1;
+            if (parentForm.comboBox1.SelectedIndex >= 0)
+                idBill = ((KeyValuePair<int, string>)parentForm.comboBox1.Items[parentForm.comboBox1.SelectedIndex]).Key;
+            var idOperation = -1;
+            if (this.comboBox1.SelectedIndex >= 0)
+                idOperation = ((KeyValuePair<int, string>) comboBox1.Items[comboBox1.SelectedIndex]).Key;
+
+            if (!textBox1.Text.Equals("0"))
             {
-                var newOperation = new OperationDto()
+                if (idOperation != -1)
                 {
-                    IdBill = SelectedIdBill,
-                    Amount = Convert.ToInt64(textBox1.Text),
-                    Comment = textBox2.Text,
-                };
-                if (checkBox1.Checked) newOperation.Date = DateTime.Today;
-                else newOperation.Date = dateTimePicker1.Value;
-                var resultOperation = ManageDb.SaveOperationtoDb(newOperation, this.Text);
-                if (resultOperation.Equals("Success"))
-                {
-                    MessageSender.SendMessage(this, "Данные успешно внесены", "Успешно");
-                    Close();
+                    var newOperation = new OperationDto()
+                    {
+                        IdOperation = idOperation,
+                        Amount = Convert.ToInt64(textBox1.Text),
+                        Comment = textBox2.Text,
+                    };
+                    if (checkBox1.Checked) newOperation.Date = DateTime.Today;
+                    else newOperation.Date = dateTimePicker1.Value;
+
+                    var resultOperation = ManageDb.SaveOperationtoDb(newOperation, this.Text);
+                    if (resultOperation.Equals("Success"))
+                    {
+                        MessageSender.SendMessage(this, "Данные успешно внесены", "Успешно");
+                        Close();
+                    }
+                    else MessageSender.SendMessage(this, resultOperation, "Ошибка");
+                    // В формочку проставили нормальные значения
+                    comboBox1_SetData();
                 }
-                else
-                {
-                    MessageSender.SendMessage(this, resultOperation, "Ошибка");
-                }
-                // В формочку проставили нормальные значения
-                InitializeData();
+                else MessageSender.SendMessage(this, "       Выбрана неверная операция", "Ошибка");
             }
-            else
-            {
-                MessageSender.SendMessage(this, "    Необходимо внести сумму операции", "Ошибка");
-            }
+            else MessageSender.SendMessage(this, "   Необходимо внести сумму операции", "Ошибка");
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -153,14 +141,40 @@ namespace myFinances
                     comboBox1.SelectedIndex = -1;
 
             if (comboBox1.SelectedIndex != -1)
-                if (comboBox1.Items[comboBox1.SelectedIndex].Equals(NewOperationText))
+                if (((KeyValuePair<int, string>)comboBox1.Items[comboBox1.SelectedIndex]).Key == NewOperationText.Key)
                 {
                     var newForm = new AddingNewOperationGroup();
                     newForm.StartPosition = FormStartPosition.CenterParent;
                     newForm.ShowDialog();
-                    // Перезаполнили значения
-                    InitializeData();
+                    // Перезаполнили значения в контроле
+                    comboBox1_SetData();
+
+
+                    var newIdOperation = ManageDb.GetIdOperationbyName(NewOperationGroupName, this.Text);
+                    // Определяем активный выбор строки для новой записи
+                    var index = -1;
+                    for (var i = 0; i < this.comboBox1.Items.Count; i++)
+                        if (((KeyValuePair<int, string>)this.comboBox1.Items[i]).Key == newIdOperation)
+                            index = i;
+                    comboBox1.SelectedIndex = index;
                 }
+        }
+
+        private void AddingNewOperation_Load(object sender, EventArgs e)
+        {
+            // Значения по-умолчанию
+            label1.Text = "Сумма";
+            label2.Text = "Комментарий";
+            textBox1.Text = "0";
+            textBox2.Text = string.Empty;
+            comboBox1_SetData();
+            comboBox1.DisplayMember = "Value";
+            dateTimePicker1.Value = DateTime.Now;
+
+            // Активность контролов
+            comboBox1.Select();
+            dateTimePicker1.Enabled = false;
+            checkBox1.Checked = true;
         }
     }
 }

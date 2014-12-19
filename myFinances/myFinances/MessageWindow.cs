@@ -15,7 +15,6 @@ namespace myFinances
         public MessageWindow()
         {
             InitializeComponent();
-
             label1.Text = Globals.ErrorText;
         }
 
