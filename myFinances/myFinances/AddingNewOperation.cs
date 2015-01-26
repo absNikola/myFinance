@@ -21,6 +21,7 @@ namespace myFinances
         public AddingNewOperation()
         {
             InitializeComponent();
+
         }
 
         private void comboBox1_SetData()
@@ -176,7 +177,8 @@ namespace myFinances
             dateTimePicker1.Value = DateTime.Now;
 
             // Активность контролов
-            comboBox1.Select();
+            textBox1.Select();
+            textBox1.SelectionStart = textBox1.Text.Length;
             dateTimePicker1.Enabled = false;
             checkBox1.Checked = true;
         }
