@@ -14,10 +14,5 @@
         <IdIncome>2</IdIncome>
         <IdExpense>9</IdExpense>
       </Bill>
-      <Bill>
-        <IdBill>1</IdBill>
-        <IdIncome>4</IdIncome>
-        <IdExpense>1</IdExpense>
-      </Bill>
     </defaultSettings>
 </settings>

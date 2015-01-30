@@ -21,7 +21,6 @@ namespace myFinances
         public AddingNewOperation()
         {
             InitializeComponent();
-
         }
 
         private void comboBox1_SetData()
@@ -60,7 +59,6 @@ namespace myFinances
             comboBox1.SelectedIndex = index;
             button1.Select();
         }
-
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             if (textBox1.Text.Equals("")) textBox1.Text = "0";
