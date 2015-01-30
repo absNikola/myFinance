@@ -121,8 +121,16 @@ namespace myFinances
                         Amount = Convert.ToInt64(textBox1.Text),
                         Comment = textBox2.Text,
                     };
-                    if (checkBox1.Checked) newOperation.Date = DateTime.Today;
-                    else newOperation.Date = dateTimePicker1.Value;
+                    // Если операция сегодня - то знаем и дату и время, если в прошлом - то только дата
+                    if (checkBox1.Checked) newOperation.Date = DateTime.Now;
+                    else newOperation.Date = dateTimePicker1.Value.Date;
+                    // Если же вдруг задали дату в будущем - кинем ошибку, операцию не сохраняем
+                    if (newOperation.Date > DateTime.Now)
+                    {
+                        dateTimePicker1.Value = DateTime.Now;
+                        MessageSender.SendMessage(this, "Нельзя отмечать траты в будущем", "Ошибка");
+                        return;
+                    }
 
                     var resultOperation = ManageDb.SaveOperationtoDb(newOperation, this.Text);
                     if (resultOperation.Equals("Success"))
