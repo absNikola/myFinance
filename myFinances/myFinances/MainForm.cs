@@ -24,6 +24,32 @@ namespace myFinances
             comboBox1_SetData();
             comboBox1.DisplayMember = "Value";
             label1.Text = "Выберите счёт";
+
+            label2.Text = "Период";
+            dateTimePicker2.Value = new DateTime(DateTime.Today.Year,DateTime.Today.Month+1,1).AddDays(-1);
+            dateTimePicker1.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+
+            dataGrid1_SetData();
+        }
+
+        private void dataGrid1_SetData()
+        {
+            if (ManageDb.CheckConnectionDb())
+            {
+                var listOperation = ManageDb.GetListOperationStructure(2, "Отметить расход");
+                int count = 1;
+                foreach (var operation in listOperation)
+                {
+                    dataGridView1.Rows.Add(count, operation.Name, 0, operation.Comment);
+                    count++;
+                }
+                var listWasted = ManageDb.GetListOperationByDate(dateTimePicker1.Value, dateTimePicker2.Value,"Отметить расход");
+                foreach (var operation in listWasted)
+                {
+                    dataGridView1.Rows.Add(count, operation.IdOperation, operation.Amount, operation.Comment);
+                    count++;
+                }
+            }
         }
 
         private void comboBox1_SetData()
@@ -134,6 +160,11 @@ namespace myFinances
 
             ManageSetting.ReadSetting();
             comboBox1_SetData();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

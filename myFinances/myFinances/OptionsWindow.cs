@@ -96,7 +96,7 @@ namespace myFinances
             comboBox2.Items.Clear();
             if (ManageDb.CheckConnectionDb())
             {
-                var listOperation = ManageDb.GetListOperation(idBill, "Добавить доход");
+                var listOperation = ManageDb.GetListOperationStructure(idBill, "Добавить доход");
                 foreach (var operation in listOperation) 
                     comboBox2.Items.Add(new KeyValuePair<int, string>(operation.Id, operation.Name));
             }
@@ -132,7 +132,7 @@ namespace myFinances
             comboBox3.Items.Clear();
             if (ManageDb.CheckConnectionDb())
             {
-                var listOperation = ManageDb.GetListOperation(idBill, "Отметить расход");
+                var listOperation = ManageDb.GetListOperationStructure(idBill, "Отметить расход");
                 foreach (var operation in listOperation)
                     comboBox3.Items.Add(new KeyValuePair<int, string>(operation.Id, operation.Name));
             }

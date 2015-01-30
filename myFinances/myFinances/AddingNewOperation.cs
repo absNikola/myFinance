@@ -38,7 +38,7 @@ namespace myFinances
 
             if (ManageDb.CheckConnectionDb())
             {
-                var listOperation = ManageDb.GetListOperation(idBill, this.Text);
+                var listOperation = ManageDb.GetListOperationStructure(idBill, this.Text);
                 foreach (var operation in listOperation)
                     comboBox1.Items.Add(new KeyValuePair<int, string>(operation.Id, operation.Name));
             }

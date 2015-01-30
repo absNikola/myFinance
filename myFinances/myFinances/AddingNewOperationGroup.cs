@@ -70,7 +70,7 @@ namespace myFinances
             if (ManageDb.CheckConnectionDb())
             {
                 var parentFormOperation = Application.OpenForms[1] as AddingNewOperation;
-                var listOperation = ManageDb.GetListOperation(idBill, parentFormOperation.Text);
+                var listOperation = ManageDb.GetListOperationStructure(idBill, parentFormOperation.Text);
                 foreach (var operation in listOperation)
                     comboBox2.Items.Add(new KeyValuePair<int, string>(operation.Id, operation.Name));
             }

@@ -183,7 +183,7 @@ namespace myFinances
         #endregion
 
         #region Load Data - Get full Lists
-        public static List<StructureDto> FindChildrenAtListOperation(StructureDto parent, List<StructureDto> listStructure, string prefix)
+        public static List<StructureDto> FindChildrenAtListOperationStructure(StructureDto parent, List<StructureDto> listStructure, string prefix)
         {
             var listOfChildren = new List<StructureDto>();
             foreach (var element in listStructure)
@@ -192,12 +192,12 @@ namespace myFinances
                 {
                     element.Name = prefix + element.Name;
                     listOfChildren.Add(element);
-                    listOfChildren.AddRange(FindChildrenAtListOperation(element, listStructure, prefix + "   "));
+                    listOfChildren.AddRange(FindChildrenAtListOperationStructure(element, listStructure, prefix + "   "));
                 }
             return listOfChildren;
         }
 
-        public static List<StructureDto> SortingAtListOperation(List<StructureDto> listIn)
+        public static List<StructureDto> SortingAtListOperationStructure(List<StructureDto> listIn)
         {
             // Неправильная сортировка, поскольку нужно не по алфавиту, а по структуре
             // listStructure.Sort((x, y) => x.Name.CompareTo(y.Name));
@@ -208,13 +208,13 @@ namespace myFinances
                 {
                     // для данного элемента должны найти всех его детей
                     listOut.Add(element);
-                    listOut.AddRange(FindChildrenAtListOperation(element, listIn, "   "));
+                    listOut.AddRange(FindChildrenAtListOperationStructure(element, listIn, "   "));
                 }
 
             return listOut;
         }
 
-        public static List<StructureDto> GetListOperation(int idBill, string typeOperation)
+        public static List<StructureDto> GetListOperationStructure(int idBill, string typeOperation)
         {
             var nameTable = string.Empty;
             if (typeOperation.Equals("Добавить доход")) nameTable = "nsi_income_structure";
@@ -258,10 +258,51 @@ namespace myFinances
             }
 
             // и еще необходимо отсортировать по правильным вложенным подкатегориям
-            listStructure = SortingAtListOperation(listStructure);
+            listStructure = SortingAtListOperationStructure(listStructure);
 
             // сказали ответ
             return listStructure;
+        }
+
+        public static List<OperationDto> GetListOperationByDate(DateTime dateStart, DateTime dateEnd, string typeOperation)
+        {
+            var nameTable = string.Empty;
+            if (typeOperation.Equals("Добавить доход")) nameTable = "income";
+            else if (typeOperation.Equals("Отметить расход")) nameTable = "expence";
+            else return null;
+
+            var listOperation = new List<OperationDto>();
+            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
+                             "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
+
+            try
+            {
+                var conn = new MySqlConnection(connString);
+                conn.Open();
+                var query = "SELECT * FROM " + nameTable + " WHERE (" + nameTable + ".Date >= '" + dateStart.ToString("yyyy-MM-dd") + "')and(" + nameTable + ".Date <= '" + dateEnd.ToString("yyyy-MM-dd") + "')";
+                var command = new MySqlCommand(query) { Connection = conn };
+                var dataReader = command.ExecuteReader();
+                while (dataReader.Read())
+                {
+                    var operation = new OperationDto()
+                    {
+                        IdOperation = (int)dataReader["Operation_Id"],
+                        Amount = (long)dataReader["Amount"],
+                        Date = (DateTime)dataReader["Date"],
+                        Comment = dataReader["Comment"] == DBNull.Value ? string.Empty : (string)dataReader["Comment"],
+                    };
+                    listOperation.Add(operation);
+                }
+                dataReader.Close();
+                conn.Close();
+            }
+            catch (MySqlException ex)
+            {
+                throw new Exception("Произошла ошибка при подключении к " + nameTable + " : " + ex.ToString());
+            }
+
+            // сказали ответ
+            return listOperation;
         }
 
         public static List<BillDto> GetListBill()
