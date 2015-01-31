@@ -115,7 +115,7 @@ namespace myFinances
                 {
                     var newOperation = new OperationDto()
                     {
-                        IdOperation = idOperation,
+                        OperationStructureId = idOperation,
                         Amount = Convert.ToInt64(textBox1.Text),
                         Comment = textBox2.Text,
                     };

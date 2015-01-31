@@ -23,11 +23,6 @@ namespace myFinances
         public static List<SettingDto> DefaultId { get; set; }
     }
 
-    public class GroupDto
-    {
-
-    }
-
     public class SettingDto
     {
         public int IdBill { get; set; }
@@ -53,10 +48,20 @@ namespace myFinances
 
     public class OperationDto
     {
-        public int Id { get; set; }
-        public int IdOperation { get; set; }
+        public int OperationId { get; set; }
+        public int OperationStructureId { get; set; }
         public long Amount { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
+        public string Comment { get; set; }
+    }
+
+    public class ShowedDataDto
+    {
+        public int Id { get; set; }
+        public int ParentId { get; set; }
+        public string Name { get; set; }
+        public long Amount { get; set; }
+        public DateTime? Date { get; set; }
         public string Comment { get; set; }
     }
 

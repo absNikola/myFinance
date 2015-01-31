@@ -166,7 +166,7 @@ namespace myFinances
                 conn.Open();
                 var command = conn.CreateCommand();
                 command.CommandText = "INSERT INTO " + nameTable + " (Operation_Id, Amount, Date, Comment) VALUES(?operationId, ?amount, ?date, ?comment)";
-                command.Parameters.Add("?operationId", MySqlDbType.Int32).Value = operation.IdOperation;
+                command.Parameters.Add("?operationId", MySqlDbType.Int32).Value = operation.OperationStructureId;
                 command.Parameters.Add("?amount", MySqlDbType.Int64).Value = operation.Amount;
                 command.Parameters.Add("?date", MySqlDbType.DateTime).Value = operation.Date;
                 command.Parameters.Add("?comment", MySqlDbType.VarChar).Value = operation.Comment;
@@ -286,7 +286,7 @@ namespace myFinances
                 {
                     var operation = new OperationDto()
                     {
-                        IdOperation = (int)dataReader["Operation_Id"],
+                        OperationStructureId = (int)dataReader["Operation_Id"],
                         Amount = (long)dataReader["Amount"],
                         Date = (DateTime)dataReader["Date"],
                         Comment = dataReader["Comment"] == DBNull.Value ? string.Empty : (string)dataReader["Comment"],

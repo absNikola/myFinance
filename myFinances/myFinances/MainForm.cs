@@ -21,34 +21,89 @@ namespace myFinances
         public MainForm()
         {
             InitializeComponent();
-            comboBox1_SetData();
-            comboBox1.DisplayMember = "Value";
-            label1.Text = "Выберите счёт";
 
+            label1.Text = "Выберите счёт";
             label2.Text = "Период";
             dateTimePicker2.Value = new DateTime(DateTime.Today.Year,DateTime.Today.Month+1,1).AddDays(-1);
             dateTimePicker1.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            button4.Text = "Расходы";
+
+            comboBox1_SetData();
+            comboBox1.DisplayMember = "Value";
 
             dataGrid1_SetData();
         }
 
+        private void CountAmount(List<ShowedDataDto> listData, int parentIdList) 
+        {
+            for (var i = parentIdList + 1; i < listData.Count; i++)
+                if (listData[i].ParentId == listData[parentIdList].Id)
+                {
+                    if (listData[i].Id != -1) CountAmount(listData, i);
+                    listData[parentIdList].Amount += listData[i].Amount;
+                }
+        }
         private void dataGrid1_SetData()
         {
+            dataGridView1.Rows.Clear();
+
+            var action = string.Empty;
+            if (button4.Text.Equals("Расходы")) action = "Отметить расход";
+            if (button4.Text.Equals("Доходы")) action = "Добавить доход";
+
+            var showedOperation = new List<ShowedDataDto>();
             if (ManageDb.CheckConnectionDb())
             {
-                var listOperation = ManageDb.GetListOperationStructure(2, "Отметить расход");
-                int count = 1;
+                // Сначала скушали структуру таблицы
+                // в зависимости от выбранного счета idBill
+                if (comboBox1.SelectedIndex == -1) return;
+                var listOperation = ManageDb.GetListOperationStructure(((KeyValuePair<int, string>)comboBox1.Items[comboBox1.SelectedIndex]).Key, action);
                 foreach (var operation in listOperation)
                 {
-                    dataGridView1.Rows.Add(count, operation.Name, 0, operation.Comment);
-                    count++;
+                    var newOperation = new ShowedDataDto() 
+                    {
+                        Id = operation.Id,
+                        ParentId = operation.ParentId,
+                        Name = operation.Name,
+                        Amount = 0,
+                        Comment = operation.Comment,
+                        Date = null,
+                    };
+                    showedOperation.Add(newOperation);
                 }
-                var listWasted = ManageDb.GetListOperationByDate(dateTimePicker1.Value, dateTimePicker2.Value,"Отметить расход");
+
+                // Самое время примапить данные
+                var listWasted = ManageDb.GetListOperationByDate(dateTimePicker1.Value, dateTimePicker2.Value, action);
                 foreach (var operation in listWasted)
                 {
-                    dataGridView1.Rows.Add(count, operation.IdOperation, operation.Amount, operation.Comment);
-                    count++;
+                    for (var i=0; i < showedOperation.Count; i++)
+                        if (operation.OperationStructureId == showedOperation[i].Id) 
+                        {
+                            var newOperation = new ShowedDataDto();
+                            newOperation.Id = -1;
+                            newOperation.ParentId = operation.OperationStructureId;
+                            newOperation.Name = string.Empty;
+                            newOperation.Amount = operation.Amount;
+                            newOperation.Comment = operation.Comment;
+                            newOperation.Date = operation.Date;
+                            showedOperation.Insert(i+1, newOperation);
+                        }
                 }
+
+                // И теперь сосчитали сумму в родительских элементах
+                for (var i = 0; i < showedOperation.Count; i++)
+                    if (showedOperation[i].Id == showedOperation[i].ParentId) CountAmount(showedOperation, i);
+            }
+
+            var count = 0;
+            for (var i=0; i<showedOperation.Count; i++)
+            {
+                var date = string.Empty;
+                if (showedOperation[i].Date != null) date = Convert.ToDateTime(showedOperation[i].Date).ToString("dd.MM.yyyy");
+
+                var item = string.Empty;
+                if (showedOperation[i].Id != -1) item = "-";
+                dataGridView1.Rows.Add(item, showedOperation[i].Name, showedOperation[i].Amount, showedOperation[i].Comment, date);
             }
         }
 
@@ -120,6 +175,8 @@ namespace myFinances
                     // Перезаполнили значения в контроле
                     comboBox1_SetData();
                 }
+
+            dataGrid1_SetData();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -162,9 +219,38 @@ namespace myFinances
             comboBox1_SetData();
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
+            if (dateTimePicker1.Value < Convert.ToDateTime("01.01.1900")) 
+                dateTimePicker1.Value = Convert.ToDateTime("01.01.1900");
+            if (dateTimePicker1.Value > Convert.ToDateTime("31.12.2200"))
+                dateTimePicker1.Value = Convert.ToDateTime("31.12.2200");
+            if (dateTimePicker2.Value < dateTimePicker1.Value)
+                dateTimePicker1.Value = dateTimePicker2.Value;
 
+            // И перезаполнили значения в таблице
+            dataGrid1_SetData();
+        }
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            if (dateTimePicker2.Value < Convert.ToDateTime("01.01.1900"))
+                dateTimePicker2.Value = Convert.ToDateTime("01.01.1900");
+            if (dateTimePicker2.Value > Convert.ToDateTime("31.12.2200"))
+                dateTimePicker2.Value = Convert.ToDateTime("31.12.2200");
+            if (dateTimePicker2.Value < dateTimePicker1.Value) 
+                dateTimePicker2.Value = dateTimePicker1.Value;
+
+            // И перезаполнили значения в таблице
+            dataGrid1_SetData();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (button4.Text.Equals("Расходы")) button4.Text = "Доходы";
+            else button4.Text = "Расходы";
+
+            dataGrid1_SetData();
         }
     }
 }
