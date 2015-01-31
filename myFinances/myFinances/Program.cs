@@ -88,9 +88,12 @@ namespace myFinances
             ManageSetting.ReadSetting();
 
             // Запуск приложения
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            if (ManageDb.CheckConnectionDb())
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainForm());
+            }
         }
     }
 }

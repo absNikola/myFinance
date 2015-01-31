@@ -266,6 +266,7 @@ namespace myFinances
 
         public static List<OperationDto> GetListOperationByDate(DateTime dateStart, DateTime dateEnd, string typeOperation)
         {
+            dateEnd = dateEnd.AddDays(1).AddSeconds(-1);
             var nameTable = string.Empty;
             if (typeOperation.Equals("Добавить доход")) nameTable = "income";
             else if (typeOperation.Equals("Отметить расход")) nameTable = "expence";

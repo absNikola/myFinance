@@ -52,48 +52,45 @@ namespace myFinances
             if (button4.Text.Equals("Доходы")) action = "Добавить доход";
 
             var showedOperation = new List<ShowedDataDto>();
-            if (ManageDb.CheckConnectionDb())
+            // Сначала скушали структуру таблицы
+            // в зависимости от выбранного счета idBill
+            if (comboBox1.SelectedIndex == -1) return;
+            var listOperation = ManageDb.GetListOperationStructure(((KeyValuePair<int, string>)comboBox1.Items[comboBox1.SelectedIndex]).Key, action);
+            foreach (var operation in listOperation)
             {
-                // Сначала скушали структуру таблицы
-                // в зависимости от выбранного счета idBill
-                if (comboBox1.SelectedIndex == -1) return;
-                var listOperation = ManageDb.GetListOperationStructure(((KeyValuePair<int, string>)comboBox1.Items[comboBox1.SelectedIndex]).Key, action);
-                foreach (var operation in listOperation)
+                var newOperation = new ShowedDataDto() 
                 {
-                    var newOperation = new ShowedDataDto() 
-                    {
-                        Id = operation.Id,
-                        ParentId = operation.ParentId,
-                        Name = operation.Name,
-                        Amount = 0,
-                        Comment = operation.Comment,
-                        Date = null,
-                    };
-                    showedOperation.Add(newOperation);
-                }
-
-                // Самое время примапить данные
-                var listWasted = ManageDb.GetListOperationByDate(dateTimePicker1.Value, dateTimePicker2.Value, action);
-                foreach (var operation in listWasted)
-                {
-                    for (var i=0; i < showedOperation.Count; i++)
-                        if (operation.OperationStructureId == showedOperation[i].Id) 
-                        {
-                            var newOperation = new ShowedDataDto();
-                            newOperation.Id = -1;
-                            newOperation.ParentId = operation.OperationStructureId;
-                            newOperation.Name = string.Empty;
-                            newOperation.Amount = operation.Amount;
-                            newOperation.Comment = operation.Comment;
-                            newOperation.Date = operation.Date;
-                            showedOperation.Insert(i+1, newOperation);
-                        }
-                }
-
-                // И теперь сосчитали сумму в родительских элементах
-                for (var i = 0; i < showedOperation.Count; i++)
-                    if (showedOperation[i].Id == showedOperation[i].ParentId) CountAmount(showedOperation, i);
+                    Id = operation.Id,
+                    ParentId = operation.ParentId,
+                    Name = operation.Name,
+                    Amount = 0,
+                    Comment = operation.Comment,
+                    Date = null,
+                };
+                showedOperation.Add(newOperation);
             }
+
+            // Самое время примапить данные
+            var listWasted = ManageDb.GetListOperationByDate(dateTimePicker1.Value, dateTimePicker2.Value, action);
+            foreach (var operation in listWasted)
+            {
+                for (var i=0; i < showedOperation.Count; i++)
+                    if (operation.OperationStructureId == showedOperation[i].Id) 
+                    {
+                        var newOperation = new ShowedDataDto();
+                        newOperation.Id = -1;
+                        newOperation.ParentId = operation.OperationStructureId;
+                        newOperation.Name = string.Empty;
+                        newOperation.Amount = operation.Amount;
+                        newOperation.Comment = operation.Comment;
+                        newOperation.Date = operation.Date;
+                        showedOperation.Insert(i+1, newOperation);
+                    }
+            }
+
+            // И теперь сосчитали сумму в родительских элементах
+            for (var i = 0; i < showedOperation.Count; i++)
+                if (showedOperation[i].Id == showedOperation[i].ParentId) CountAmount(showedOperation, i);
 
             var count = 0;
             for (var i=0; i<showedOperation.Count; i++)
@@ -136,8 +133,7 @@ namespace myFinances
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedIndex == -1) 
-                MessageSender.SendMessage(this, "Не выбран счёт для совершения операций", "Ошибка");
+            if (comboBox1.SelectedIndex == -1) MessageSender.SendMessage(this, "Не выбран счёт для совершения операций", "Ошибка");
             else
             {
                 // Проверяем что для выбранной строки есть запись в БД
@@ -155,8 +151,9 @@ namespace myFinances
                         StartPosition = FormStartPosition.CenterParent,
                     };
                     newForm.ShowDialog();
+                    dataGrid1_SetData();
                 }else MessageSender.SendMessage(this, "           Выбран несуществующий счёт \n" +
-                                                 "               для совершения операций", "Ошибка");  
+                                                "               для совершения операций", "Ошибка");  
             }
         }
 
@@ -200,6 +197,7 @@ namespace myFinances
                         StartPosition = FormStartPosition.CenterParent,
                     };
                     newForm.ShowDialog();
+                    dataGrid1_SetData();
                 }
                 else MessageSender.SendMessage(this, "           Выбран несуществующий счёт \n" +
                                                 "               для совершения операций", "Ошибка");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -22,6 +23,11 @@ namespace myFinances
                 Globals.DbUserName = document.Descendants("DbUserName").First().Value;
                 Globals.DbUserPassword = document.Descendants("DbUserPassword").First().Value;
 
+                if (!ManageDb.CheckConnectionDb())
+                {
+                    MessageSender.SendMessage(new Form(), "Нет подключения к БД", "Ошибка");
+                    return;
+                }
                 Globals.DefaultIdBill = Convert.ToInt32(document.Descendants("IdBill").First().Value);
                 if (!ManageDb.IsBillExist(Globals.DefaultIdBill)) Globals.DefaultIdBill = -1;
 
