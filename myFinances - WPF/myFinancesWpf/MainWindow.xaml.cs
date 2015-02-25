@@ -24,7 +24,18 @@ namespace myFinancesWpf
         {
             InitializeComponent();
 
-            MainWindow.Ti
+            Che
+
+            this.Button_Settings.Content = "Настройки";
+            this.Button_Income.Content = "Добавить доход";
+            this.Label_Bill.Content = "Выберите счёт";
+            this.Button_Expence.Content = "Отметить расход";
+
+            this.DatePicker_Start.SelectedDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            this.Label_Period.Content = "Период";
+            this.DatePicker_End.SelectedDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month + 1, 1).AddDays(-1);
+
+            this.Button_ChangeOperation.Content = "";
         }
     }
 }
