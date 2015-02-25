@@ -5,7 +5,7 @@
         <ServerPort>3306</ServerPort>
         <DbName>financialDB</DbName>
         <DbUserName>root</DbUserName>  
-        <DbUserPassword>123</DbUserPassword>
+        <DbUserPassword></DbUserPassword>
     </connection>
     <defaultSettings>
       <IdBill>2</IdBill>
