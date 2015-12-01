@@ -67,3 +67,20 @@ E:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.Message
 E:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.MainForm.resources
 E:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.Properties.Resources.resources
 E:\git_repository\myFinance\myFinances\myFinances\obj\Release\myFinances.csproj.GenerateResource.Cache
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\bin\Release\myFinances.exe.config
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\obj\Release\myFinances.exe
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\obj\Release\myFinances.pdb
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\bin\Release\libs\MySql.Data.dll
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\bin\Release\Settings.xml
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\bin\Release\myFinances.exe
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\bin\Release\myFinances.pdb
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\bin\Release\MySql.Data.dll
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\obj\Release\myFinances.csprojResolveAssemblyReference.cache
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\obj\Release\myFinances.AddingNewBill.resources
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\obj\Release\myFinances.AddingNewOperation.resources
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\obj\Release\myFinances.AddingNewOperationGroup.resources
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\obj\Release\myFinances.MessageWindow.resources
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\obj\Release\myFinances.MainForm.resources
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\obj\Release\myFinances.OptionsWindow.resources
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\obj\Release\myFinances.Properties.Resources.resources
+C:\Site\Soft\Git\myFinances - WinForms\myFinances\obj\Release\myFinances.csproj.GenerateResource.Cache

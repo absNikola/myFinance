@@ -24,7 +24,10 @@ namespace myFinances
 
             label1.Text = "Выберите счёт";
             label2.Text = "Период";
-            dateTimePicker2.Value = new DateTime(DateTime.Today.Year,DateTime.Today.Month+1,1).AddDays(-1);
+            DateTime finishDate;
+            if (DateTime.Today.Month < 12) finishDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month+1, 1);
+            else finishDate = new DateTime(DateTime.Today.Year+1 , 1, 1);
+            dateTimePicker2.Value = finishDate.AddDays(-1);
             dateTimePicker1.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             button4.Text = "Расходы";
 
