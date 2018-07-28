@@ -44,6 +44,7 @@
             this.ColumnSum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnComment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnData = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Persentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -110,7 +111,8 @@
             this.ColumnName,
             this.ColumnSum,
             this.ColumnComment,
-            this.ColumnData});
+            this.ColumnData,
+            this.Persentage});
             this.dataGridView1.Location = new System.Drawing.Point(12, 108);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
@@ -201,6 +203,13 @@
             this.ColumnData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.ColumnData.Width = 65;
             // 
+            // Persentage
+            // 
+            this.Persentage.HeaderText = "Процент";
+            this.Persentage.Name = "Persentage";
+            this.Persentage.ReadOnly = true;
+            this.Persentage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -244,6 +253,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSum;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnComment;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnData;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Persentage;
     }
 }
 

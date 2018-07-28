@@ -97,18 +97,25 @@ namespace myFinances
                     CountAmount(showedOperation, i);
 
             // Отображаем лишь те категории, где сумма ненулевая
-            for (var i=0; i<showedOperation.Count; i++)
+            for (var i=0; i < showedOperation.Count; i++)
             {
                 var date = string.Empty;
                 if (showedOperation[i].Date != null) 
                     date = Convert.ToDateTime(showedOperation[i].Date).ToString("dd.MM.yyyy");
 
                 var item = string.Empty;
-                if (showedOperation[i].Id != -1) 
+                var percentage = string.Empty;
+                if (showedOperation[i].Id != -1)
+                {
                     item = "-";
+                    var percentageValue = showedOperation[0].Amount <= 0 
+                        ? 0 
+                        : 100 * ((double)showedOperation[i].Amount / showedOperation[0].Amount);
+                    percentage = percentageValue.ToString("N2");
+                }
 
-                if (showedOperation[i].Amount > 0) 
-                    dataGridView1.Rows.Add(item, showedOperation[i].Name, showedOperation[i].Amount, showedOperation[i].Comment, date);
+                if (showedOperation[i].Amount > 0)
+                    dataGridView1.Rows.Add(item, showedOperation[i].Name, showedOperation[i].Amount, showedOperation[i].Comment, date, percentage);
             }
         }
 
