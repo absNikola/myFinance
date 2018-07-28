@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -60,7 +61,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(452, 66);
+            this.button2.Location = new System.Drawing.Point(691, 66);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(142, 36);
             this.button2.TabIndex = 1;
@@ -72,7 +73,7 @@
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(191, 75);
+            this.comboBox1.Location = new System.Drawing.Point(316, 74);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.comboBox1.Size = new System.Drawing.Size(232, 21);
@@ -82,7 +83,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(255, 49);
+            this.label1.Location = new System.Drawing.Point(408, 48);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 3;
@@ -90,7 +91,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(519, 12);
+            this.button3.Location = new System.Drawing.Point(758, 25);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 4;
@@ -116,7 +117,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(12, 108);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(582, 483);
+            this.dataGridView1.Size = new System.Drawing.Size(821, 483);
             this.dataGridView1.TabIndex = 5;
             // 
             // dateTimePicker1
@@ -146,7 +147,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(452, 604);
+            this.button4.Location = new System.Drawing.Point(691, 604);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(142, 25);
             this.button4.TabIndex = 9;
@@ -188,15 +189,18 @@
             // 
             // ColumnComment
             // 
-            this.ColumnComment.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnComment.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.ColumnComment.Frozen = true;
             this.ColumnComment.HeaderText = "Комментарий";
             this.ColumnComment.Name = "ColumnComment";
             this.ColumnComment.ReadOnly = true;
             this.ColumnComment.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.ColumnComment.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ColumnComment.Width = 390;
             // 
             // ColumnData
             // 
+            this.ColumnData.Frozen = true;
             this.ColumnData.HeaderText = "Дата";
             this.ColumnData.Name = "ColumnData";
             this.ColumnData.ReadOnly = true;
@@ -205,16 +209,24 @@
             // 
             // Persentage
             // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.Format = "N2";
+            dataGridViewCellStyle2.NullValue = null;
+            this.Persentage.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Persentage.Frozen = true;
             this.Persentage.HeaderText = "Процент";
+            this.Persentage.MinimumWidth = 60;
             this.Persentage.Name = "Persentage";
             this.Persentage.ReadOnly = true;
+            this.Persentage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Persentage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Persentage.Width = 60;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(608, 641);
+            this.ClientSize = new System.Drawing.Size(845, 641);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.dateTimePicker2);
