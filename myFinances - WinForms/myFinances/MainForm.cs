@@ -93,17 +93,22 @@ namespace myFinances
 
             // И теперь сосчитали сумму в родительских элементах
             for (var i = 0; i < showedOperation.Count; i++)
-                if (showedOperation[i].Id == showedOperation[i].ParentId) CountAmount(showedOperation, i);
+                if (showedOperation[i].Id == showedOperation[i].ParentId) 
+                    CountAmount(showedOperation, i);
 
-            var count = 0;
+            // Отображаем лишь те категории, где сумма ненулевая
             for (var i=0; i<showedOperation.Count; i++)
             {
                 var date = string.Empty;
-                if (showedOperation[i].Date != null) date = Convert.ToDateTime(showedOperation[i].Date).ToString("dd.MM.yyyy");
+                if (showedOperation[i].Date != null) 
+                    date = Convert.ToDateTime(showedOperation[i].Date).ToString("dd.MM.yyyy");
 
                 var item = string.Empty;
-                if (showedOperation[i].Id != -1) item = "-";
-                dataGridView1.Rows.Add(item, showedOperation[i].Name, showedOperation[i].Amount, showedOperation[i].Comment, date);
+                if (showedOperation[i].Id != -1) 
+                    item = "-";
+
+                if (showedOperation[i].Amount > 0) 
+                    dataGridView1.Rows.Add(item, showedOperation[i].Name, showedOperation[i].Amount, showedOperation[i].Comment, date);
             }
         }
 

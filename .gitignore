@@ -1,0 +1,50 @@
+# Packages           #
+######################
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+
+# Logs               #
+######################
+*.log
+log.html
+output.xml
+report.html
+Logs
+
+# Temprorary files   #
+######################
+test/Temporary/*
+
+# OS generated files #
+######################
+Icon?
+ehthumbs.db
+Thumbs.db
+*~ 
+*.lock 
+*.DS_Store 
+*.swp 
+*.out
+*.bak
+
+# Python specific    #
+######################
+*.pyc
+*.pyo
+*.pyd
+*.egg
+*.egg-info
+*.coverage
+
+# IDE specific  #
+###############################
+.project
+.pydevproject
+/.git
+/.settings
+.idea/
