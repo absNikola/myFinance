@@ -260,7 +260,7 @@ namespace myFinances
             }
             
             ManageSetting.SaveSetting();
-            MessageSender.SendMessage(this, "                Данные успешно обновлены", "Успешно");
+            MessageSender.SendMessage(this, "".PadLeft(15) + "Данные успешно обновлены", "Успешно");
             Close();
         }
 
@@ -274,7 +274,7 @@ namespace myFinances
             Globals.DbUserPassword = textBox5.Text;
 
             if (ManageDb.CheckConnectionDb())
-                MessageSender.SendMessage(this, "               Подключение успешно", "Успешно");
+                MessageSender.SendMessage(this, "".PadLeft(15) + "Подключение успешно", "Успешно");
             else 
                 MessageSender.SendMessage(this, "Настройки подключения заданы неверно", "Ошибка");
             // Затем возвращаем обратно дефолтные настройки
