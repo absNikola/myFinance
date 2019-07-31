@@ -61,10 +61,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Enabled = false;
             this.label1.Location = new System.Drawing.Point(21, 37);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 2;
+            this.label1.TabIndex = 10;
             this.label1.Text = "label1";
             // 
             // checkBox1
@@ -110,15 +111,16 @@
             this.textBox2.Location = new System.Drawing.Point(122, 71);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(311, 20);
-            this.textBox2.TabIndex = 7;
+            this.textBox2.TabIndex = 2;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Enabled = false;
             this.label2.Location = new System.Drawing.Point(21, 74);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 8;
+            this.label2.TabIndex = 11;
             this.label2.Text = "label2";
             // 
             // AddingNewOperation

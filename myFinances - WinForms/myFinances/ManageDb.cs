@@ -266,21 +266,20 @@ namespace myFinances
 
         public static List<OperationDto> GetListOperationByDate(DateTime dateStart, DateTime dateEnd, string typeOperation)
         {
-            dateEnd = dateEnd.AddDays(1).AddSeconds(-1);
             var nameTable = string.Empty;
             if (typeOperation.Equals("Добавить доход")) nameTable = "income";
             else if (typeOperation.Equals("Отметить расход")) nameTable = "expence";
             else return null;
 
             var listOperation = new List<OperationDto>();
-            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort.ToString() + "; DATABASE=" + Globals.DbName +
+            var connString = "SERVER=" + Globals.ServerName + "; PORT=" + Globals.ServerPort + "; DATABASE=" + Globals.DbName +
                              "; UID=" + Globals.DbUserName + "; PWD=" + Globals.DbUserPassword;
 
             try
             {
                 var conn = new MySqlConnection(connString);
                 conn.Open();
-                var query = "SELECT * FROM " + nameTable + " WHERE (" + nameTable + ".Date >= '" + dateStart.ToString("yyyy-MM-dd") + "')and(" + nameTable + ".Date <= '" + dateEnd.ToString("yyyy-MM-dd") + "')";
+                var query = "SELECT * FROM " + nameTable + " WHERE (" + nameTable + ".Date >= '" + dateStart.ToString("yyyy-MM-dd") + "')and(" + nameTable + ".Date < '" + dateEnd.AddDays(1).ToString("yyyy-MM-dd") + "')";
                 var command = new MySqlCommand(query) { Connection = conn };
                 var dataReader = command.ExecuteReader();
                 while (dataReader.Read())

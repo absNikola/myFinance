@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Services.Description;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using MySql.Data.MySqlClient;
@@ -23,12 +24,30 @@ namespace myFinances
             InitializeComponent();
 
             label1.Text = "Выберите счёт";
-            label2.Text = "Период";
-            DateTime finishDate;
-            if (DateTime.Today.Month < 12) finishDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month+1, 1);
-            else finishDate = new DateTime(DateTime.Today.Year+1 , 1, 1);
-            dateTimePicker2.Value = finishDate.AddDays(-1);
-            dateTimePicker1.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            label2.Text = "Период включительно";
+            DateTime startDate = Convert.ToDateTime("01.01.1900");
+            DateTime finishDate = Convert.ToDateTime("31.12.2200");
+            if (DateTime.Today.Day >= 1 && DateTime.Today.Day <= 9)
+            {
+                startDate = (DateTime.Today.Month > 1 )
+                    ? new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, 25)
+                    : new DateTime(DateTime.Today.Year - 1, 12, 25);
+                finishDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 9);
+            } 
+            else if (DateTime.Today.Day >= 10 && DateTime.Today.Day <= 24)
+            {
+                startDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 10);
+                finishDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 24);
+            } 
+            else if (DateTime.Today.Day >= 25)
+            {
+                startDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 25);
+                finishDate = (DateTime.Today.Month < 12)
+                        ? new DateTime(DateTime.Today.Year, DateTime.Today.Month + 1, 9)
+                        : new DateTime(DateTime.Today.Year + 1, 1, 9);
+            }
+            dateTimePicker1.Value = startDate;
+            dateTimePicker2.Value = finishDate;
             button4.Text = "Расходы";
 
             comboBox1_SetData();
@@ -37,7 +56,7 @@ namespace myFinances
             dataGrid1_SetData();
         }
 
-        private void CountAmount(List<ShowedDataDto> listData, int parentIdList) 
+        private void CountAmount(List<ShowedDataDto> listData, int parentIdList)
         {
             for (var i = parentIdList + 1; i < listData.Count; i++)
                 if (listData[i].ParentId == listData[parentIdList].Id)
@@ -61,7 +80,7 @@ namespace myFinances
             var listOperation = ManageDb.GetListOperationStructure(((KeyValuePair<int, string>)comboBox1.Items[comboBox1.SelectedIndex]).Key, action);
             foreach (var operation in listOperation)
             {
-                var newOperation = new ShowedDataDto() 
+                var newOperation = new ShowedDataDto()
                 {
                     Id = operation.Id,
                     ParentId = operation.ParentId,
@@ -77,8 +96,8 @@ namespace myFinances
             var listWasted = ManageDb.GetListOperationByDate(dateTimePicker1.Value, dateTimePicker2.Value, action);
             foreach (var operation in listWasted)
             {
-                for (var i=0; i < showedOperation.Count; i++)
-                    if (operation.OperationStructureId == showedOperation[i].Id) 
+                for (var i = 0; i < showedOperation.Count; i++)
+                    if (operation.OperationStructureId == showedOperation[i].Id)
                     {
                         var newOperation = new ShowedDataDto();
                         newOperation.Id = -1;
@@ -87,20 +106,20 @@ namespace myFinances
                         newOperation.Amount = operation.Amount;
                         newOperation.Comment = operation.Comment;
                         newOperation.Date = operation.Date;
-                        showedOperation.Insert(i+1, newOperation);
+                        showedOperation.Insert(i + 1, newOperation);
                     }
             }
 
             // И теперь сосчитали сумму в родительских элементах
             for (var i = 0; i < showedOperation.Count; i++)
-                if (showedOperation[i].Id == showedOperation[i].ParentId) 
+                if (showedOperation[i].Id == showedOperation[i].ParentId)
                     CountAmount(showedOperation, i);
 
             // Отображаем лишь те категории, где сумма ненулевая
-            for (var i=0; i < showedOperation.Count; i++)
+            for (var i = 0; i < showedOperation.Count; i++)
             {
                 var date = string.Empty;
-                if (showedOperation[i].Date != null) 
+                if (showedOperation[i].Date != null)
                     date = Convert.ToDateTime(showedOperation[i].Date).ToString("dd.MM.yyyy");
 
                 var item = string.Empty;
@@ -108,8 +127,8 @@ namespace myFinances
                 if (showedOperation[i].Id != -1)
                 {
                     item = "-";
-                    var percentageValue = showedOperation[0].Amount <= 0 
-                        ? 0 
+                    var percentageValue = showedOperation[0].Amount <= 0
+                        ? 0
                         : 100 * ((double)showedOperation[i].Amount / showedOperation[0].Amount);
                     percentage = percentageValue.ToString("N2");
                 }
@@ -129,14 +148,14 @@ namespace myFinances
             if (ManageDb.CheckConnectionDb())
             {
                 var listBill = ManageDb.GetListBill();
-                foreach (var bill in listBill) 
+                foreach (var bill in listBill)
                     comboBox1.Items.Add(new KeyValuePair<int, string>(bill.Id, bill.Name));
             }
 
             // Определяем активный выбор строки
             var index = -1;
-            for (var i = 0; i<comboBox1.Items.Count; i++)
-                if (((KeyValuePair<int, string>) comboBox1.Items[i]).Key == Globals.DefaultIdBill) 
+            for (var i = 0; i < comboBox1.Items.Count; i++)
+                if (((KeyValuePair<int, string>)comboBox1.Items[i]).Key == Globals.DefaultIdBill)
                     index = i;
             comboBox1.SelectedIndex = index;
             button1.Select();
@@ -167,8 +186,8 @@ namespace myFinances
                     };
                     newForm.ShowDialog();
                     dataGrid1_SetData();
-                }else MessageSender.SendMessage(this, "           Выбран несуществующий счёт \n" +
-                                                "               для совершения операций", "Ошибка");  
+                }
+                else MessageSender.SendMessage(this, "".PadLeft(11) + "Выбран несуществующий счёт \n" + "".PadLeft(15) + "для совершения операций", "Ошибка");
             }
         }
 
@@ -214,8 +233,7 @@ namespace myFinances
                     newForm.ShowDialog();
                     dataGrid1_SetData();
                 }
-                else MessageSender.SendMessage(this, "           Выбран несуществующий счёт \n" +
-                                                "               для совершения операций", "Ошибка");
+                else MessageSender.SendMessage(this, "".PadLeft(11) + "Выбран несуществующий счёт \n" + "".PadLeft(15) + "для совершения операций", "Ошибка");
             }
         }
 
@@ -234,7 +252,7 @@ namespace myFinances
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
-            if (dateTimePicker1.Value < Convert.ToDateTime("01.01.1900")) 
+            if (dateTimePicker1.Value < Convert.ToDateTime("01.01.1900"))
                 dateTimePicker1.Value = Convert.ToDateTime("01.01.1900");
             if (dateTimePicker1.Value > Convert.ToDateTime("31.12.2200"))
                 dateTimePicker1.Value = Convert.ToDateTime("31.12.2200");
@@ -251,7 +269,7 @@ namespace myFinances
                 dateTimePicker2.Value = Convert.ToDateTime("01.01.1900");
             if (dateTimePicker2.Value > Convert.ToDateTime("31.12.2200"))
                 dateTimePicker2.Value = Convert.ToDateTime("31.12.2200");
-            if (dateTimePicker2.Value < dateTimePicker1.Value) 
+            if (dateTimePicker2.Value < dateTimePicker1.Value)
                 dateTimePicker2.Value = dateTimePicker1.Value;
 
             // И перезаполнили значения в таблице

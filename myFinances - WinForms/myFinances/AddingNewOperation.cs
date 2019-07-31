@@ -120,16 +120,9 @@ namespace myFinances
                         Comment = textBox2.Text,
                     };
                     // Если операция сегодня - то знаем и дату и время, если в прошлом - то только дата
-                    if (checkBox1.Checked) newOperation.Date = DateTime.Now;
+                    if (checkBox1.Checked) newOperation.Date = DateTime.Now.AddHours(2);
                     else newOperation.Date = dateTimePicker1.Value.Date;
-                    // Если же вдруг задали дату в будущем - кинем ошибку, операцию не сохраняем
-                    if (newOperation.Date > DateTime.Now)
-                    {
-                        dateTimePicker1.Value = DateTime.Now;
-                        MessageSender.SendMessage(this, "Нельзя отмечать траты в будущем", "Ошибка");
-                        return;
-                    }
-
+                    
                     var resultOperation = ManageDb.SaveOperationtoDb(newOperation, this.Text);
                     if (resultOperation.Equals("Success"))
                     {
@@ -140,9 +133,9 @@ namespace myFinances
                     // В формочку проставили нормальные значения
                     comboBox1_SetData();
                 }
-                else MessageSender.SendMessage(this, "       Выбрана неверная операция", "Ошибка");
+                else MessageSender.SendMessage(this, "".PadLeft(7) + "Выбрана неверная операция", "Ошибка");
             }
-            else MessageSender.SendMessage(this, "   Необходимо внести сумму операции", "Ошибка");
+            else MessageSender.SendMessage(this, "".PadLeft(3) + "Необходимо внести сумму операции", "Ошибка");
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
